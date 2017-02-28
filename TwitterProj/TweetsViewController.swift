@@ -35,7 +35,6 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             for tweet in tweets {
                 print(tweet.text!)
-                print("between the tweets")
             }
             }) { (error) in
             print(error.localizedDescription)
