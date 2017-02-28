@@ -58,11 +58,13 @@ class TwitterClient: BDBOAuth1SessionManager {
             parameters: nil,
             progress: nil,
             success: { (task, response) in
+                print("this succeeded")
                 let dictionaries = response as! [NSDictionary]
                 let tweets = Tweet.tweetsWithArray(dictionaries:
                     dictionaries)
                 success(tweets)
     }, failure: { (task, error) in
+        print("this failed")
         failure(error)
     })
     }
