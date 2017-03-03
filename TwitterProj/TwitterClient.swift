@@ -68,6 +68,23 @@ class TwitterClient: BDBOAuth1SessionManager {
         failure(error)
     })
     }
+    
+    func retweetRequest(id : String, success: @escaping ((Tweet) -> ()), failure : @escaping
+        (Error) -> ()) {
+        get("1.1/statuses/retweet/\(id).json",
+            parameters: nil,
+            progress: nil,
+            success: { (task, response) in
+                    print("retweet succeeded")
+                    let dictionary = response as! NSDictionary
+                    let tweet = Tweet(dictionary: dictionary)
+                success(tweet)
+        }, failure: { (task, error) in
+            print("1.1/statuses/retweet/\(id).json")
+            print("retweet failed \(error.localizedDescription)")
+            failure(error)
+        })
+    }
     func currentAccount(success: @escaping ((User) -> ()), failure : @escaping
         ((Error) -> ())) {
         get("1.1/account/verify_credentials.json",

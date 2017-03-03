@@ -20,7 +20,7 @@ class User: NSObject {
         
         name = dictionary["name"] as? String
         screenName = dictionary["screen_name"] as? String
-        
+        print(screenName)
         if let profileURLString = dictionary["profile_image_url_https"] as?
             String {
             profileURL = URL(string: profileURLString)
