@@ -71,18 +71,50 @@ class TwitterClient: BDBOAuth1SessionManager {
     
     func retweetRequest(id : String, success: @escaping ((Tweet) -> ()), failure : @escaping
         (Error) -> ()) {
-        get("1.1/statuses/retweet/\(id).json",
+        post("1.1/statuses/retweet/\(id).json",
             parameters: nil,
             progress: nil,
             success: { (task, response) in
                     print("retweet succeeded")
                     let dictionary = response as! NSDictionary
                     let tweet = Tweet(dictionary: dictionary)
+                    print("retweetcount: \(tweet.retweetCount)")
+                    print("favorcount: \(tweet.favoritesCount)")
                 success(tweet)
         }, failure: { (task, error) in
             print("1.1/statuses/retweet/\(id).json")
             print("retweet failed \(error.localizedDescription)")
             failure(error)
+        })
+    }
+    func favorRequest(id : String, success: @escaping ((Tweet) -> ()), failure : @escaping
+        (Error) -> ()) {
+        post("1.1/favorites/create.json?id=\(id)",
+            parameters: nil,
+            progress: nil,
+            success: { (task, response) in
+                print("favor succeeded")
+                let dictionary = response as! NSDictionary
+                let tweet = Tweet(dictionary: dictionary)
+                print("retweetcount: \(tweet.retweetCount)")
+                print("favorcount: \(tweet.favoritesCount)")
+                success(tweet)
+        }, failure: { (task, error) in
+            print("favor failed \(error.localizedDescription)")
+            failure(error)
+        })
+    }
+    
+    func createTweet(tweetText : String, params: NSDictionary?, completion: @escaping (_ error: Error?) -> ()) {
+        post("1.1/statuses/update.json",
+            parameters: params,
+            progress: nil,
+            success: {(operation: URLSessionDataTask!, response: Any?) -> Void in
+                print("tweet succeeded: \(tweetText)")
+                completion(nil)
+        }, failure: { (operation: URLSessionDataTask?, error: Error?) -> Void in
+            print("Couldn't compose")
+            completion(error as Error?)
         })
     }
     func currentAccount(success: @escaping ((User) -> ()), failure : @escaping

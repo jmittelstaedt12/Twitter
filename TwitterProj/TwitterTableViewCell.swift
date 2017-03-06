@@ -12,12 +12,24 @@ class TwitterTableViewCell: UITableViewCell {
 
     var tweet: Tweet?{
         didSet{
+            
             usernameLabel.text = tweet?.name
             handleLabel.text = "@" + (tweet?.screenName)!
             retweetLabel.text = "\((tweet?.retweetCount)!)"
             favoriteLabel.text = "\((tweet?.favoritesCount)!)"
             tweetLabel.text = tweet?.text
-            
+            if tweet?.retweeted == true{
+                retweetImageView.image = #imageLiteral(resourceName: "retweet-icon-green")
+                
+            } else{
+                retweetImageView.image = #imageLiteral(resourceName: "retweet-icon")
+            }
+            if tweet?.favorited == true{
+                favorImageView.image = #imageLiteral(resourceName: "favor-icon-red")
+                
+            } else{
+                favorImageView.image = #imageLiteral(resourceName: "favor-icon")
+            }
             //cell.timeStampLabel.text = "\((ourTweet.timestamp)!)"
             let today = NSDate.init()
             var timeSince = Int(today.timeIntervalSince((tweet?.timestamp)!))
@@ -35,6 +47,7 @@ class TwitterTableViewCell: UITableViewCell {
 
         }
     }
+    
     @IBOutlet weak var favorImageView: UIImageView!
     @IBOutlet weak var retweetImageView: UIImageView!
     @IBOutlet weak var favoriteLabel: UILabel!
@@ -42,9 +55,7 @@ class TwitterTableViewCell: UITableViewCell {
     @IBOutlet weak var handleLabel: UILabel!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var tweetLabel: UILabel!
-    
     @IBOutlet weak var timeStampLabel: UILabel!
-    
     @IBOutlet weak var profileImageView: UIImageView!
     
     weak var delegate: TweetCellActions?
@@ -63,6 +74,21 @@ class TwitterTableViewCell: UITableViewCell {
         retweetImageView.addGestureRecognizer(tapRetweet)
         retweetImageView.isUserInteractionEnabled = true
         
+//        let toggleRetweet = UITapGestureRecognizer(target: self, action: #selector(toggleRetweet(_:)))
+//        retweetImageView.addGestureRecognizer(toggleRetweet)
+//        retweetImageView.isUserInteractionEnabled = true
+        
+//        let toggleFavor = UITapGestureRecognizer(target: self, action: #selector(toggleFavor(_ :)))
+//        favorImageView.addGestureRecognizer(toggleFavor)
+//        favorImageView.isUserInteractionEnabled = true
+        
+        let tapTweet = UITapGestureRecognizer(target: self, action: #selector(tweetSegue(_ :)))
+        tweetLabel.addGestureRecognizer(tapTweet)
+        tweetLabel.isUserInteractionEnabled = true
+        
+        let tapImage = UITapGestureRecognizer(target: self, action: #selector(profileSegue(_ :)))
+        profileImageView.addGestureRecognizer(tapImage)
+        profileImageView.isUserInteractionEnabled = true
     }
     @objc private func favorTweet(_ gesture: UITapGestureRecognizer){
        delegate?.favorTweet(tweet!)
@@ -78,7 +104,15 @@ class TwitterTableViewCell: UITableViewCell {
     }
     
     @objc private func toggleFavor(_ gesture: UITapGestureRecognizer){
-        
+        delegate?.toggleFavor(tweet!)
+    }
+    
+    @objc private func tweetSegue(_ gesture: UITapGestureRecognizer){
+        delegate?.tweetSegue(self)
+    }
+    
+    @objc private func profileSegue(_ gesture: UITapGestureRecognizer){
+        delegate?.profileSegue(self)
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -94,4 +128,6 @@ protocol TweetCellActions: class{
     func retweet(_ tweet: Tweet)
     func toggleRetweet(_ tweet: Tweet)
     func toggleFavor(_ tweet: Tweet)
+    func tweetSegue(_ cell: UITableViewCell)
+    func profileSegue(_ cell: UITableViewCell)
 }

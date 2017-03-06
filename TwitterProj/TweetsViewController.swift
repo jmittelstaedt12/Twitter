@@ -64,20 +64,32 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "TwitterTableViewCell",for: indexPath) as! TwitterTableViewCell
         let ourTweet = self.tweets![indexPath.row]
+        
         cell.tweet = ourTweet
         cell.delegate = self
         return cell
     }
     
     func favorTweet(_ tweet: Tweet) {
-        
+        if let index = tweets.index(of: tweet) {
+            let indexPath = IndexPath(row: index, section: 0)
+            
+            TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweet) in
+                self.tweets[index] = tweet
+                
+                self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                
+            }) { (error) in
+                
+            }
+        }
         
     }
     func retweet(_ tweet: Tweet) {
         if let index = tweets.index(of: tweet) {
+           
             let indexPath = IndexPath(row: index, section: 0)
-            
-            print(tweet.retweeted)
+            print(tweet.favorited)
             TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweet) in
                 self.tweets[index] = tweet
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
@@ -94,4 +106,39 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
+    func tweetSegue(_ cell: UITableViewCell) {
+        performSegue(withIdentifier: "tweetTapSegue", sender: cell)
+    }
+    
+    func profileSegue(_ cell: UITableViewCell) {
+        
+        performSegue(withIdentifier: "profileSegue", sender: cell)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if(segue.identifier == "tweetTapSegue") {
+            let cell = sender as! UITableViewCell
+            let indexPath = tableView.indexPath(for: cell)
+            let tweet = tweets[indexPath!.row]
+            let detailedVC = segue.destination as! TweetDetailsViewController
+            
+            detailedVC.tweet = tweet
+            
+        }
+        if(segue.identifier == "profileSegue") {
+            
+            let cell = sender as! UITableViewCell
+            let indexPath = tableView.indexPath(for: cell)
+            let tweet = tweets[indexPath!.row]
+            let profileVC = segue.destination as! profileViewController
+            
+            profileVC.tweet = tweet
+            
+        }
+        if(segue.identifier == "newTweetSegue"){
+            let currentUser = self.user
+            let tweetVC = segue.destination as! newTweetViewController
+            tweetVC.user = currentUser
+        }
+    }
 }
