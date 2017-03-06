@@ -15,6 +15,7 @@ class TwitterTableViewCell: UITableViewCell {
             
             usernameLabel.text = tweet?.name
             handleLabel.text = "@" + (tweet?.screenName)!
+            
             retweetLabel.text = "\((tweet?.retweetCount)!)"
             favoriteLabel.text = "\((tweet?.favoritesCount)!)"
             tweetLabel.text = tweet?.text

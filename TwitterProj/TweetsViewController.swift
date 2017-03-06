@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, TweetCellActions{
+class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, TweetCellActions, TweetDetailActions{
 
 
     @IBOutlet weak var tableView: UITableView!
@@ -18,6 +18,10 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
+        tableView.insertSubview(refreshControl, at: 0)
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -70,6 +74,27 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return cell
     }
     
+    func refreshControlAction(_ refreshControl: UIRefreshControl){
+        TwitterClient.sharedInstance.homeTimeline(success: { (tweets : [Tweet])
+            in
+            self.tweets = tweets
+            TwitterClient.sharedInstance.currentAccount(success: { (user : User)
+                in
+                self.user = user
+                self.tableView.reloadData()
+                refreshControl.endRefreshing()
+            }) { (error) in
+                print(error.localizedDescription)
+            }
+            for tweet in tweets {
+                print(tweet.text!)
+            }
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+        
+    }
+    
     func favorTweet(_ tweet: Tweet) {
         if let index = tweets.index(of: tweet) {
             let indexPath = IndexPath(row: index, section: 0)
@@ -99,12 +124,44 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
         }
     }
+    
+    func favorDetailTweet(_ tweet: Tweet) {
+        if let index = tweets.index(of: tweet) {
+            let indexPath = IndexPath(row: index, section: 0)
+            
+            TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweet) in
+                self.tweets[index] = tweet
+                
+                self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                
+            }) { (error) in
+                
+            }
+        }
+    }
+    
+    func retweetDetail(_ tweet: Tweet) {
+        if let index = tweets.index(of: tweet) {
+            
+            let indexPath = IndexPath(row: index, section: 0)
+            print(tweet.favorited)
+            TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweet) in
+                self.tweets[index] = tweet
+                self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                
+            }) { (error) in
+                
+            }
+        }
+    }
+    
     func toggleRetweet(_ tweet: Tweet) {
         
     }
     func toggleFavor(_ tweet: Tweet) {
         
     }
+    
     
     func tweetSegue(_ cell: UITableViewCell) {
         performSegue(withIdentifier: "tweetTapSegue", sender: cell)
@@ -120,7 +177,8 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let cell = sender as! UITableViewCell
             let indexPath = tableView.indexPath(for: cell)
             let tweet = tweets[indexPath!.row]
-            let detailedVC = segue.destination as! TweetDetailsViewController
+            let navVC = segue.destination as? UINavigationController
+            let detailedVC = navVC?.viewControllers.first as! TweetDetailsViewController
             
             detailedVC.tweet = tweet
             
@@ -137,7 +195,8 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         if(segue.identifier == "newTweetSegue"){
             let currentUser = self.user
-            let tweetVC = segue.destination as! newTweetViewController
+            let navVC = segue.destination as? UINavigationController
+            let tweetVC = navVC?.viewControllers.first as! newTweetViewController
             tweetVC.user = currentUser
         }
     }

@@ -20,10 +20,19 @@ class TweetDetailsViewController: UIViewController {
     @IBOutlet weak var retweetLabel: UILabel!
     @IBOutlet weak var favoritesLabel: UILabel!
     @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet weak var retweetImageView: UIImageView!
+    @IBOutlet weak var favoriteImageView: UIImageView!
     
+    @IBAction func homeButton(_ sender: UIBarButtonItem) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    weak var delegate: TweetDetailActions?
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupGestures()
         usernameLabel.text = tweet?.name
         handleLabel.text = "@" + (tweet?.screenName)!
         tweetLabel.text = tweet?.text
@@ -36,8 +45,45 @@ class TweetDetailsViewController: UIViewController {
         retweetLabel.text = "\((tweet?.retweetCount)!)"
         favoritesLabel.text = "\((tweet?.favoritesCount)!)"
         profileImageView.setImageWith((tweet?.profileURL)!)
+        if tweet?.retweeted == true{
+            retweetImageView.image = #imageLiteral(resourceName: "retweet-icon-green")
+            
+        } else{
+            retweetImageView.image = #imageLiteral(resourceName: "retweet-icon")
+        }
+        if tweet?.favorited == true{
+            favoriteImageView.image = #imageLiteral(resourceName: "favor-icon-red")
+            
+        } else{
+            favoriteImageView.image = #imageLiteral(resourceName: "favor-icon")
+        }
 
         // Do any additional setup after loading the view.
+    }
+    
+    func setupGestures(){
+        let tapFavor = UITapGestureRecognizer(target: self, action: #selector(favorDetailTweet(_:)))
+        favoriteImageView.addGestureRecognizer(tapFavor)
+        favoriteImageView.isUserInteractionEnabled = true
+        
+        let tapRetweet = UITapGestureRecognizer(target: self, action: #selector(retweetDetail(_:)))
+        retweetImageView.addGestureRecognizer(tapRetweet)
+        retweetImageView.isUserInteractionEnabled = true
+    }
+    @objc private func favorDetailTweet(_ gesture: UITapGestureRecognizer){
+        delegate?.favorDetailTweet(tweet!)
+        TwitterClient.sharedInstance.favorRequest(id: (self.tweet?.id)!, success: { (tweet) in
+            
+        }) { (error) in
+            
+        }
+    }
+    func retweetDetail(_ gesture: UITapGestureRecognizer){
+        delegate?.retweetDetail(tweet!)
+        TwitterClient.sharedInstance.retweetRequest(id: (self.tweet?.id)!, success: { (tweet) in
+        }) { (error) in
+            
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -51,10 +97,9 @@ class TweetDetailsViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         if(segue.identifier == "replySegue") {
-            let replyVC = segue.destination as! replyViewController
+            let navVC = segue.destination as? UINavigationController
+            let replyVC = navVC?.viewControllers.first as! replyViewController
             let tweetPass = self.tweet
-            
-            
             replyVC.tweet = tweetPass
             
             
@@ -62,5 +107,8 @@ class TweetDetailsViewController: UIViewController {
 
         }
     }
-
+}
+protocol TweetDetailActions: class{
+    func favorDetailTweet(_ tweet: Tweet)
+    func retweetDetail(_ tweet: Tweet)
 }

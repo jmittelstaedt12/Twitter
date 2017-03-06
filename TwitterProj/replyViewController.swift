@@ -21,7 +21,7 @@ class replyViewController: UIViewController {
     //weak var delegate: ReplyAndCancelFuncDelegate?
     
     @IBAction func cancelButton(_ sender: UIBarButtonItem) {
-        performSegue(withIdentifier: "replyToDetailSegue", sender: tweet)
+        self.dismiss(animated: true, completion: nil)
     }
 
     @IBAction func replyButton(_ sender: UIBarButtonItem) {
@@ -38,7 +38,7 @@ class replyViewController: UIViewController {
             print(error?.localizedDescription)
             
         })
-        performSegue(withIdentifier: "replyToDetailSegue", sender: tweet)
+        self.dismiss(animated: true, completion: nil)
     }
     
     override func viewDidLoad() {

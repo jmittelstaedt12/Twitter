@@ -18,7 +18,8 @@ class newTweetViewController: UIViewController {
     var tweetText: String!
     var user: User?
     @IBAction func cancelButton(_ sender: UIBarButtonItem) {
-        performSegue(withIdentifier: "tweetToMainSegue", sender: nil)
+        self.dismiss(animated: true, completion: nil)
+        //performSegue(withIdentifier: "tweetToMainSegue", sender: nil)
     }
     
     @IBAction func tweetButton(_ sender: UIBarButtonItem) {
@@ -30,7 +31,7 @@ class newTweetViewController: UIViewController {
             print(error?.localizedDescription)
         })
         
-        performSegue(withIdentifier: "tweetToMainSegue", sender: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
