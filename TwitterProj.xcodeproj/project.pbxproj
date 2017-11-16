@@ -37,7 +37,7 @@
 		19628D311E6C9AA1005D7A5A /* newTweetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = newTweetViewController.swift; sourceTree = "<group>"; };
 		19890C5C1E651C0D004FBA6F /* TwitterTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwitterTableViewCell.swift; sourceTree = "<group>"; };
 		19DC1C261E6C9CB7000BF61B /* replyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = replyViewController.swift; sourceTree = "<group>"; };
-		19DC1C2A1E6CB31B000BF61B /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = "../../Downloads/Twitter-master/TwitterProj/Base.lproj/Main.storyboard"; sourceTree = "<group>"; };
+		19DC1C2A1E6CB31B000BF61B /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		19E0B3D11E5CE36F003F8026 /* TwitterProj.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitterProj.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		19E0B3D41E5CE36F003F8026 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		19E0B3DB1E5CE36F003F8026 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
