@@ -15,15 +15,19 @@ class User: NSObject {
     var profileURL: URL?
     var tagLine: String?
     var dictionary: NSDictionary?
+    var userTweets: [Tweet]!
     
     init(dictionary: NSDictionary) {
         
         name = dictionary["name"] as? String
         screenName = dictionary["screen_name"] as? String
         print(screenName)
+        
         if let profileURLString = dictionary["profile_image_url_https"] as?
             String {
-            profileURL = URL(string: profileURLString)
+            print(profileURLString.replacingOccurrences(of: "_normal", with: ""))
+            profileURL = URL(string: profileURLString.replacingOccurrences(of: "_normal", with: ""))
+            
         }
         
         tagLine = dictionary["description"] as? String

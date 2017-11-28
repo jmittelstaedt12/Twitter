@@ -189,8 +189,8 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let indexPath = tableView.indexPath(for: cell)
             let tweet = tweets[indexPath!.row]
             let profileVC = segue.destination as! profileViewController
-            
             profileVC.tweet = tweet
+            profileVC.userTweets = self.tweets
             
         }
         if(segue.identifier == "newTweetSegue"){
