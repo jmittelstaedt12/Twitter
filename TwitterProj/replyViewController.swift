@@ -8,7 +8,7 @@
 
 import UIKit
 
-class replyViewController: UIViewController {
+class replyViewController: UIViewController, UITextViewDelegate {
 
     @IBOutlet weak var replyTextView: UITextView!
     @IBOutlet weak var handleLabel: UILabel!
@@ -44,29 +44,29 @@ class replyViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        replyTextView.delegate = self
+        replyTextView.text = "Write your reply here..."
+        replyTextView.textColor = .lightGray
         replyID = tweet?.id
         replyHandle = tweet?.screenName
         usernameLabel.text = tweet?.name
         handleLabel.text = "@" + (tweet?.screenName)!
         profileImageView.setImageWith((tweet?.profileURL)!)
         
-        // Do any additional setup after loading the view.
-    }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if(segue.identifier == "replyToDetailSegue") {
-//            let detailVC = segue.destination as! TweetDetailsViewController
-//            let tweetPass = self.tweet
-//
-//            detailVC.tweet = tweetPass
-//        }
     }
     
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if replyTextView.text == "Write your reply here..."{
+            replyTextView.text = ""
+            replyTextView.textColor = .black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if replyTextView.text == ""{
+            replyTextView.text = "Write your reply here..."
+            replyTextView.textColor = .lightGray
+        }
+    }
 
 }
-
-//protocol ReplyAndCancelFuncDelegate: class{
-//    func didCancel()
-//    func didReply(tweetText: String)
-//}

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class newTweetViewController: UIViewController {
+class newTweetViewController: UIViewController, UITextViewDelegate {
 
     @IBOutlet weak var tweetTextView: UITextView!
     @IBOutlet weak var usernameLabel: UILabel!
@@ -36,24 +36,29 @@ class newTweetViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        tweetTextView.delegate = self
+        tweetTextView.text = "Write your tweet here..."
+        tweetTextView.textColor = .lightGray
         usernameLabel.text = user?.name
         handleLabel.text = user?.screenName
         profileImageView.setImageWith((user?.profileURL)!)
-        // Do any additional setup after loading the view.
-    }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
-
-
-/*
-    // In a storyboard-based application, you will often want to do a littl*preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-    }*/
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if tweetTextView.text == "Write your tweet here..."{
+            tweetTextView.text = ""
+            tweetTextView.textColor = .black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if tweetTextView.text == ""{
+            tweetTextView.text = "Write your tweet here..."
+            tweetTextView.textColor = .lightGray
+        }
+    }
+    
 
 }
