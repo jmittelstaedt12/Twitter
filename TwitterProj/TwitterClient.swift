@@ -31,7 +31,7 @@ class TwitterClient: BDBOAuth1SessionManager {
                                                                 "https://api.twitter.com/oauth/authorize?oauth_token=\((requestToken?.token)!)")!
                                                             UIApplication.shared.open(url)
     }, failure: { (error) in
-    print("Error: \(error?.localizedDescription)")
+    print("Error: \(error!.localizedDescription)")
     self.loginFailure?(error!)
     })
 }
@@ -48,7 +48,7 @@ class TwitterClient: BDBOAuth1SessionManager {
         success: { (accessToken) in
         self.loginSuccess?()
         }) { (error) in
-        print("error: \(error?.localizedDescription)")
+        print("error: \(error!.localizedDescription)")
         self.loginFailure?(error!)
         }
     }

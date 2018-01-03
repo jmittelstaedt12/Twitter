@@ -28,7 +28,7 @@ class newTweetViewController: UIViewController, UITextViewDelegate {
         
         TwitterClient.sharedInstance.createTweet(tweetText: tweetText!, params: paramsDict, completion: { (error) -> () in
             print("Composing")
-            print(error?.localizedDescription)
+            print(error?.localizedDescription as Any)
         })
         
         self.dismiss(animated: true, completion: nil)
