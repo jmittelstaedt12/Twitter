@@ -27,7 +27,9 @@ class LoginViewController: UIViewController {
             print("I have logged in!")
             self.performSegue(withIdentifier: "loginSegue", sender: nil)
         }) {( error: Error) in
-            print("error: \(error.localizedDescription)")
+            let alert = UIAlertController(title: "Failed Login", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
     

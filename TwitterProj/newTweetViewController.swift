@@ -7,7 +7,6 @@
 //
 
 import UIKit
-
 class newTweetViewController: UIViewController, UITextViewDelegate {
 
     @IBOutlet weak var tweetTextView: UITextView!
@@ -52,7 +51,7 @@ class newTweetViewController: UIViewController, UITextViewDelegate {
             tweetTextView.textColor = .black
         }
     }
-    
+
     func textViewDidEndEditing(_ textView: UITextView) {
         if tweetTextView.text == ""{
             tweetTextView.text = "Write your tweet here..."

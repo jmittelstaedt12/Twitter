@@ -101,7 +101,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweet) in
                 self.tweets[index] = tweet
-                
+                tweet.favoritesCount += 1
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
                 
             }) { (error) in
@@ -117,8 +117,8 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             print(tweet.favorited)
             TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweet) in
                 self.tweets[index] = tweet
+                tweet.retweeted = true
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                
             }) { (error) in
                 
             }
@@ -131,7 +131,6 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweet) in
                 self.tweets[index] = tweet
-                
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
                 
             }) { (error) in
