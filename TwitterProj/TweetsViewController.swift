@@ -98,10 +98,10 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func favorTweet(_ tweet: Tweet) {
         if let index = tweets.index(of: tweet) {
             let indexPath = IndexPath(row: index, section: 0)
-            
+            let favors = self.tweets[index].favoritesCount
             TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweet) in
                 self.tweets[index] = tweet
-                tweet.favoritesCount += 1
+                self.tweets[index].favoritesCount = favors+1
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
                 
             }) { (error) in
@@ -115,9 +115,10 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
            
             let indexPath = IndexPath(row: index, section: 0)
             print(tweet.favorited)
+            let favors = self.tweets[index].favoritesCount
             TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweet) in
                 self.tweets[index] = tweet
-                tweet.retweeted = true
+                self.tweets[index].favoritesCount = favors
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
             }) { (error) in
                 
