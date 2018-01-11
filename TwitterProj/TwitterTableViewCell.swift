@@ -71,17 +71,13 @@ class TwitterTableViewCell: UITableViewCell {
         favorImageView.addGestureRecognizer(tapFavor)
         favorImageView.isUserInteractionEnabled = true
         
-        let tapRetweet = UITapGestureRecognizer(target: self, action: #selector(retweet(_ :)))
-        retweetImageView.addGestureRecognizer(tapRetweet)
+        let toggleRetweet = UITapGestureRecognizer(target: self, action: #selector(toggleRetweet(_:)))
+        retweetImageView.addGestureRecognizer(toggleRetweet)
         retweetImageView.isUserInteractionEnabled = true
-        
-//        let toggleRetweet = UITapGestureRecognizer(target: self, action: #selector(toggleRetweet(_:)))
-//        retweetImageView.addGestureRecognizer(toggleRetweet)
-//        retweetImageView.isUserInteractionEnabled = true
-        
-//        let toggleFavor = UITapGestureRecognizer(target: self, action: #selector(toggleFavor(_ :)))
-//        favorImageView.addGestureRecognizer(toggleFavor)
-//        favorImageView.isUserInteractionEnabled = true
+
+        let toggleFavor = UITapGestureRecognizer(target: self, action: #selector(toggleFavor(_ :)))
+        favorImageView.addGestureRecognizer(toggleFavor)
+        favorImageView.isUserInteractionEnabled = true
         
         let tapTweet = UITapGestureRecognizer(target: self, action: #selector(tweetSegue(_ :)))
         tweetLabel.addGestureRecognizer(tapTweet)
@@ -94,10 +90,6 @@ class TwitterTableViewCell: UITableViewCell {
     @objc private func favorTweet(_ gesture: UITapGestureRecognizer){
        delegate?.favorTweet(tweet!)
         
-    }
-    
-    @objc private func retweet(_ gesture: UITapGestureRecognizer){
-        delegate?.retweet(tweet!)
     }
     
     @objc private func toggleRetweet(_ gesture: UITapGestureRecognizer){
@@ -126,7 +118,6 @@ class TwitterTableViewCell: UITableViewCell {
 
 protocol TweetCellActions: class{
     func favorTweet(_ tweet: Tweet)
-    func retweet(_ tweet: Tweet)
     func toggleRetweet(_ tweet: Tweet)
     func toggleFavor(_ tweet: Tweet)
     func tweetSegue(_ cell: UITableViewCell)

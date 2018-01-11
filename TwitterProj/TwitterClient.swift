@@ -132,6 +132,20 @@ class TwitterClient: BDBOAuth1SessionManager {
         )
     }
     
+    func unretweetRequest(id : String, success: @escaping ((Tweet) -> ()), failure : @escaping
+        (Error) -> ()) {
+        post("1.1/statuses/unretweet/\(id).json",parameters: nil,progress: nil,
+             success: {(task, response) in
+                
+                let dictionary = response as! NSDictionary
+                let tweet = Tweet(dictionary: dictionary)
+                tweet.retweeted = false
+                tweet.retweetCount -= 1
+                success(tweet)
+        },failure: {(task, error) in
+            failure(error)})
+    }
+    
 //    func getTweet(id: String) {
 //        get("1.1/statuses/show.json?id=\(id)",
 //            parameters: nil,

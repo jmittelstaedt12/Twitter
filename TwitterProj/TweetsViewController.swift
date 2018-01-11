@@ -95,6 +95,32 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
+    func toggleRetweet(_ tweet: Tweet) {
+        if let index = tweets.index(of: tweet) {
+            
+            let indexPath = IndexPath(row: index, section: 0)
+            
+            if self.tweets[index].retweeted{
+                TwitterClient.sharedInstance.unretweetRequest(id: (tweet.id)!, success: { (tweet) in
+                    self.tweets[index] = tweet
+                    //self.tweets[index].retweeted = false
+                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                }) { (error) in
+                    
+                }
+            } else{
+                let favors = self.tweets[index].favoritesCount
+                TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweet) in
+                    self.tweets[index] = tweet
+                    self.tweets[index].favoritesCount = favors
+                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                }) { (error) in
+                    
+                }
+            }
+        }
+    }
+    
     func favorTweet(_ tweet: Tweet) {
         if let index = tweets.index(of: tweet) {
             let indexPath = IndexPath(row: index, section: 0)
@@ -109,21 +135,6 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
         }
         
-    }
-    func retweet(_ tweet: Tweet) {
-        if let index = tweets.index(of: tweet) {
-           
-            let indexPath = IndexPath(row: index, section: 0)
-            print(tweet.favorited)
-            let favors = self.tweets[index].favoritesCount
-            TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweet) in
-                self.tweets[index] = tweet
-                self.tweets[index].favoritesCount = favors
-                self.tableView.reloadRows(at: [indexPath], with: .automatic)
-            }) { (error) in
-                
-            }
-        }
     }
     
     func favorDetailTweet(_ tweet: Tweet) {
@@ -155,9 +166,6 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-    func toggleRetweet(_ tweet: Tweet) {
-        
-    }
     func toggleFavor(_ tweet: Tweet) {
         
     }
