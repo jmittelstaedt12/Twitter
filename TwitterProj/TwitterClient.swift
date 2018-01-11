@@ -131,4 +131,14 @@ class TwitterClient: BDBOAuth1SessionManager {
             failure(error)}
         )
     }
+    
+//    func getTweet(id: String) {
+//        get("1.1/statuses/show.json?id=\(id)",
+//            parameters: nil,
+//            progress: nil,
+//            success: { (task, response) in
+//                let thisTweet = response as! Tweet
+//                success(thisTweet)
+//        })
+//    }
 }
