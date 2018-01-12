@@ -14,8 +14,6 @@ class newTweetViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var handleLabel: UILabel!
     
-    var tweetText: String!
-    var user: User?
     @IBAction func cancelButton(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
         //performSegue(withIdentifier: "tweetToMainSegue", sender: nil)
@@ -32,6 +30,9 @@ class newTweetViewController: UIViewController, UITextViewDelegate {
         
         self.dismiss(animated: true, completion: nil)
     }
+    
+    var tweetText: String!
+    var user: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()

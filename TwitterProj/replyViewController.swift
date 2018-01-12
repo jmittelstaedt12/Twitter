@@ -14,11 +14,6 @@ class replyViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var handleLabel: UILabel!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var profileImageView: UIImageView!
-    var tweet: Tweet?
-    var replyText: String!
-    var replyID: String!
-    var replyHandle: String!
-    //weak var delegate: ReplyAndCancelFuncDelegate?
     
     @IBAction func cancelButton(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
@@ -40,6 +35,11 @@ class replyViewController: UIViewController, UITextViewDelegate {
         })
         self.dismiss(animated: true, completion: nil)
     }
+    
+    var tweet: Tweet?
+    var replyText: String!
+    var replyID: String!
+    var replyHandle: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()

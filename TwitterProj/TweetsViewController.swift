@@ -12,7 +12,9 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
 
     @IBOutlet weak var tableView: UITableView!
-    
+    @IBAction func onLogoutButton(_ sender: Any) {
+        TwitterClient.sharedInstance.logout()
+    }
     var tweets : [Tweet]!
     var user : User!
     override func viewDidLoad() {
@@ -45,10 +47,6 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             print(error.localizedDescription)
             }
         }
-
-    @IBAction func onLogoutButton(_ sender: Any) {
-        TwitterClient.sharedInstance.logout()
-    }
     
     func onRetweet(){
         
@@ -206,7 +204,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let tweet = tweets[indexPath!.row]
             let profileVC = segue.destination as! profileViewController
             profileVC.tweet = tweet
-            profileVC.userTweets = self.tweets
+            profileVC.screen_name = tweet.screenName
             
         }
         if(segue.identifier == "newTweetSegue"){

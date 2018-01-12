@@ -8,7 +8,7 @@
 
 import UIKit
 
-class profileViewController: UIViewController{
+class profileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, TweetCellActions{
     
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var bannerImageView: UIImageView!
@@ -21,10 +21,15 @@ class profileViewController: UIViewController{
     
     
     var tweet: Tweet?
+    var screen_name: String?
     var userTweets: [Tweet]?
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tweetsTableView.dataSource = self
+        tweetsTableView.delegate = self
+        tweetsTableView.estimatedRowHeight = 200
+        tweetsTableView.rowHeight = UITableViewAutomaticDimension
         
         usernameLabel.text = tweet?.name
         handleLabel.text = "@" + (tweet?.screenName)!
@@ -38,6 +43,13 @@ class profileViewController: UIViewController{
         tweetCountLabel.text = "\((tweet?.statusCount)!)"
         followingCountLabel.text = "\((tweet?.followingCount)!)"
         followersCountLabel.text = "\((tweet?.followersCount)!)"
+        TwitterClient.sharedInstance.userTimelineRequest(screen_name: screen_name!, success: { (tweets: [Tweet]) in
+            self.userTweets = tweets
+            self.tweetsTableView.reloadData()
+        }) { (error: Error) in
+            print(error.localizedDescription)
+            
+        }
         
         let ourTimeStamp: Date = (tweet?.timestamp)!
         let dateformatter = DateFormatter()
@@ -46,34 +58,38 @@ class profileViewController: UIViewController{
         
     }
 
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        
-//        if let tweetcount = self.userTweets?.count {
-//            return tweetcount
-//        } else{
-//            return 0
-//        }
-//        
-//    }
-//    
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
-//        
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "TwitterTableViewCell",for: indexPath) as! TwitterTableViewCell
-//        let ourTweet = self.userTweets![indexPath.row]
-//        cell.tweet = ourTweet
-//        return cell
-//    }
-    
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if let tweetcount = self.userTweets?.count {
+            return tweetcount
+        } else{
+            return 0
+        }
+        
     }
-    */
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
+
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileTableViewCell",for: indexPath) as! TwitterTableViewCell
+        let ourTweet = self.userTweets![indexPath.row]
+        cell.tweet = ourTweet
+        cell.delegate = self
+        return cell
+    }
+    
+    func toggleRetweet(_ tweet: Tweet) {
+
+    }
+    
+    func toggleFavor(_ tweet: Tweet) {
+        
+    }
+    
+    func tweetSegue(_ cell: UITableViewCell) {
+        
+    }
+    
+    func profileSegue(_ cell: UITableViewCell) {
+        
+    }
 
 }

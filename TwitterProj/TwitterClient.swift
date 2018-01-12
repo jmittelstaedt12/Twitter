@@ -17,6 +17,7 @@ class TwitterClient: BDBOAuth1SessionManager {
         consumerSecret: "8W8GfM1COtot7L9IRVubOXZ7QvHUWVj1ednM86xYUSgNjlOKyP")!
     var loginSuccess : (() -> ())?
     var loginFailure : ((Error) -> ())?
+    
     func login(success : @escaping ()->(), failure: @escaping (Error)->()) {
         loginSuccess = success
         loginFailure = failure
@@ -158,13 +159,14 @@ class TwitterClient: BDBOAuth1SessionManager {
             failure(error)})
     }
     
-//    func getTweet(id: String) {
-//        get("1.1/statuses/show.json?id=\(id)",
-//            parameters: nil,
-//            progress: nil,
-//            success: { (task, response) in
-//                let thisTweet = response as! Tweet
-//                success(thisTweet)
-//        })
-//    }
+    func userTimelineRequest(screen_name : String, success: @escaping (([Tweet]) -> ()), failure : @escaping
+        (Error) -> ()){
+        get("1.1/statuses/user_timeline.json?screen_name=\(screen_name)&count=20",parameters: nil,progress: nil,
+            success: {(task, response) in
+                let dictionaries = response as! [NSDictionary]
+                let tweets = Tweet.tweetsWithArray(dictionaries: dictionaries)
+                success(tweets)
+        },failure: {(task,error) in
+            failure(error)})
+    }
 }

@@ -9,9 +9,6 @@
 import UIKit
 
 class TweetDetailsViewController: UIViewController {
-
-    
-    var tweet: Tweet?
     
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var handleLabel: UILabel!
@@ -26,8 +23,9 @@ class TweetDetailsViewController: UIViewController {
     @IBAction func homeButton(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
     }
+    
     weak var delegate: TweetDetailActions?
-
+    var tweet: Tweet?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +56,6 @@ class TweetDetailsViewController: UIViewController {
             favoriteImageView.image = #imageLiteral(resourceName: "favor-icon")
         }
 
-        // Do any additional setup after loading the view.
     }
     
     func setupGestures(){
@@ -85,14 +82,6 @@ class TweetDetailsViewController: UIViewController {
             
         }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    
-
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
