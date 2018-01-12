@@ -142,6 +142,18 @@ class TwitterClient: BDBOAuth1SessionManager {
                 tweet.retweeted = false
                 tweet.retweetCount -= 1
                 success(tweet)
+                
+        },failure: {(task, error) in
+            failure(error)})
+    }
+    func unfavorRequest(id : String, success: @escaping ((Tweet) -> ()), failure : @escaping
+        (Error) -> ()) {
+        post("1.1/favorites/destroy.json?id=\(id)",parameters: nil,progress: nil,
+             success: {(task, response) in
+                
+                let dictionary = response as! NSDictionary
+                let tweet = Tweet(dictionary: dictionary)
+                success(tweet)
         },failure: {(task, error) in
             failure(error)})
     }

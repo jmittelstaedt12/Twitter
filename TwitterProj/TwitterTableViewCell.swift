@@ -67,9 +67,9 @@ class TwitterTableViewCell: UITableViewCell {
     }
     
     func setupGestures(){
-        let tapFavor = UITapGestureRecognizer(target: self, action: #selector(favorTweet(_ :)))
-        favorImageView.addGestureRecognizer(tapFavor)
-        favorImageView.isUserInteractionEnabled = true
+//        let tapFavor = UITapGestureRecognizer(target: self, action: #selector(favorTweet(_ :)))
+//        favorImageView.addGestureRecognizer(tapFavor)
+//        favorImageView.isUserInteractionEnabled = true
         
         let toggleRetweet = UITapGestureRecognizer(target: self, action: #selector(toggleRetweet(_:)))
         retweetImageView.addGestureRecognizer(toggleRetweet)
@@ -87,10 +87,10 @@ class TwitterTableViewCell: UITableViewCell {
         profileImageView.addGestureRecognizer(tapImage)
         profileImageView.isUserInteractionEnabled = true
     }
-    @objc private func favorTweet(_ gesture: UITapGestureRecognizer){
-       delegate?.favorTweet(tweet!)
-        
-    }
+//    @objc private func favorTweet(_ gesture: UITapGestureRecognizer){
+//       delegate?.favorTweet(tweet!)
+//
+//    }
     
     @objc private func toggleRetweet(_ gesture: UITapGestureRecognizer){
         delegate?.toggleRetweet(tweet!)
@@ -117,7 +117,7 @@ class TwitterTableViewCell: UITableViewCell {
 }
 
 protocol TweetCellActions: class{
-    func favorTweet(_ tweet: Tweet)
+//    func favorTweet(_ tweet: Tweet)
     func toggleRetweet(_ tweet: Tweet)
     func toggleFavor(_ tweet: Tweet)
     func tweetSegue(_ cell: UITableViewCell)
