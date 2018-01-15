@@ -10,6 +10,7 @@ import UIKit
 
 class profileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, TweetCellActions{
     
+    @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var bannerImageView: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
@@ -18,18 +19,19 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var followingCountLabel: UILabel!
     @IBOutlet weak var followersCountLabel: UILabel!
     @IBOutlet weak var tweetsTableView: UITableView!
-    
+    @IBOutlet weak var infoView: UIView!
     
     var tweet: Tweet?
     var screen_name: String?
     var userTweets: [Tweet]?
+    
+    override func viewDidLayoutSubviews() {
+        tweetsTableView.tableHeaderView = headerView
+        tweetsTableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: bannerImageView.frame.height+71.5)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        tweetsTableView.dataSource = self
-        tweetsTableView.delegate = self
-        tweetsTableView.estimatedRowHeight = 200
-        tweetsTableView.rowHeight = UITableViewAutomaticDimension
         
         usernameLabel.text = tweet?.name
         handleLabel.text = "@" + (tweet?.screenName)!
@@ -43,6 +45,11 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
         tweetCountLabel.text = "\((tweet?.statusCount)!)"
         followingCountLabel.text = "\((tweet?.followingCount)!)"
         followersCountLabel.text = "\((tweet?.followersCount)!)"
+        
+        tweetsTableView.dataSource = self
+        tweetsTableView.delegate = self
+        tweetsTableView.estimatedRowHeight = 200
+        tweetsTableView.rowHeight = UITableViewAutomaticDimension
         TwitterClient.sharedInstance.userTimelineRequest(screen_name: screen_name!, success: { (tweets: [Tweet]) in
             self.userTweets = tweets
             self.tweetsTableView.reloadData()
@@ -50,12 +57,6 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
             print(error.localizedDescription)
             
         }
-        
-        let ourTimeStamp: Date = (tweet?.timestamp)!
-        let dateformatter = DateFormatter()
-        dateformatter.dateFormat = "MM/dd/yy, h:mm a"
-        let ourDate = dateformatter.string(from: ourTimeStamp)
-        
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
