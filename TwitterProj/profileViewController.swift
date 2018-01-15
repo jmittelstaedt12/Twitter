@@ -25,11 +25,6 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
     var screen_name: String?
     var userTweets: [Tweet]?
     
-    override func viewDidLayoutSubviews() {
-        tweetsTableView.tableHeaderView = headerView
-        tweetsTableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: bannerImageView.frame.height+71.5)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -50,6 +45,7 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
         tweetsTableView.delegate = self
         tweetsTableView.estimatedRowHeight = 200
         tweetsTableView.rowHeight = UITableViewAutomaticDimension
+        tweetsTableView.tableHeaderView = headerView
         TwitterClient.sharedInstance.userTimelineRequest(screen_name: screen_name!, success: { (tweets: [Tweet]) in
             self.userTweets = tweets
             self.tweetsTableView.reloadData()
@@ -57,8 +53,18 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
             print(error.localizedDescription)
             
         }
+        DispatchQueue.main.async {
+            self.tweetsTableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.bannerImageView.frame.height+71.5)
+            self.tweetsTableView.reloadData()
+        }
     }
 
+    override func viewDidLayoutSubviews() {
+//        bannerImageView.frame = CGRect(x: 0, y: 0,width: self.view.frame.width, height: bannerImageView.frame.height)
+//
+//        tweetsTableView.reloadData()
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if let tweetcount = self.userTweets?.count {
