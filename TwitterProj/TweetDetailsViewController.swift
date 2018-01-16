@@ -42,7 +42,7 @@ class TweetDetailsViewController: UIViewController {
         timeStampLabel.text = ourDate
         retweetLabel.text = "\((tweet?.retweetCount)!)"
         favoritesLabel.text = "\((tweet?.favoritesCount)!)"
-        profileImageView.setImageWith((tweet?.profileURL)!)
+        profileImageView.setImageWith((tweet?.profileURLHD)!)
         if tweet?.retweeted == true{
             retweetImageView.image = #imageLiteral(resourceName: "retweet-icon-green")
             

@@ -13,6 +13,7 @@ class Tweet: NSObject {
     var name: String?
     var screenName: String?
     var profileURL: URL?
+    var profileURLHD: URL?
     var text: String?
     var timestamp : Date?
     var retweetCount : Int = 0
@@ -46,7 +47,8 @@ class Tweet: NSObject {
         followersCount = (dictionary.value(forKeyPath: "user.followers_count") as? Int)!
         followingCount = (dictionary.value(forKeyPath: "user.friends_count") as? Int)!
         if let profileURLString = dictionary.value(forKeyPath: "user.profile_image_url_https") as? String {
-            profileURL = URL(string: profileURLString.replacingOccurrences(of: "_normal", with: ""))
+            profileURL = URL(string: profileURLString)
+            profileURLHD = URL(string: profileURLString.replacingOccurrences(of: "_normal", with: ""))
         }
         if let profileBackgroundURLString = dictionary.value(forKeyPath: "user.profile_banner_url") as? String {
             profileBackgroundURL = URL(string: profileBackgroundURLString)

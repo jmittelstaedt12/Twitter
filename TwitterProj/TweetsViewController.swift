@@ -66,7 +66,6 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "TwitterTableViewCell",for: indexPath) as! TwitterTableViewCell
         let ourTweet = self.tweets![indexPath.row]
-        
         cell.tweet = ourTweet
         cell.delegate = self
         return cell

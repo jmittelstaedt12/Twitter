@@ -51,7 +51,7 @@ class replyViewController: UIViewController, UITextViewDelegate {
         replyHandle = tweet?.screenName
         usernameLabel.text = tweet?.name
         handleLabel.text = "@" + (tweet?.screenName)!
-        profileImageView.setImageWith((tweet?.profileURL)!)
+        profileImageView.setImageWith((tweet?.profileURLHD)!)
         
     }
     
