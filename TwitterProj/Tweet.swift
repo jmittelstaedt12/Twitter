@@ -10,6 +10,8 @@ import UIKit
 
 class Tweet: NSObject {
     
+    var retweeterName: String?
+    var tweetDictionary: NSDictionary!
     var name: String?
     var screenName: String?
     var profileURL: URL?
@@ -36,28 +38,34 @@ class Tweet: NSObject {
     
     init(dictionary : NSDictionary) {
         
-        screenName = dictionary.value(forKeyPath: "user.screen_name") as? String
-        name = dictionary.value(forKeyPath: "user.name") as? String
-        text = dictionary["text"] as? String
-        retweetCount = (dictionary["retweet_count"] as? Int) ?? 0
-        favoritesCount = (dictionary["favorite_count"] as? Int) ?? 0
-        retweeted = (dictionary.value(forKeyPath: "retweeted") as? Bool)!
-        favorited = (dictionary.value(forKeyPath: "favorited") as? Bool)!
-        statusCount = (dictionary.value(forKeyPath: "user.statuses_count") as? Int)!
-        followersCount = (dictionary.value(forKeyPath: "user.followers_count") as? Int)!
-        followingCount = (dictionary.value(forKeyPath: "user.friends_count") as? Int)!
-        if let profileURLString = dictionary.value(forKeyPath: "user.profile_image_url_https") as? String {
+        retweeterName = dictionary.value(forKeyPath: "user.name") as? String
+        tweetDictionary = dictionary["retweeted_status"] as? NSDictionary
+        if tweetDictionary == nil{
+            tweetDictionary = dictionary
+            retweeterName = ""
+        }
+        screenName = tweetDictionary.value(forKeyPath: "user.screen_name") as? String
+        name = tweetDictionary.value(forKeyPath: "user.name") as? String
+        text = tweetDictionary["text"] as? String
+        retweetCount = (tweetDictionary["retweet_count"] as? Int) ?? 0
+        favoritesCount = (tweetDictionary["favorite_count"] as? Int) ?? 0
+        retweeted = (tweetDictionary.value(forKeyPath: "retweeted") as? Bool)!
+        favorited = (tweetDictionary.value(forKeyPath: "favorited") as? Bool)!
+        statusCount = (tweetDictionary.value(forKeyPath: "user.statuses_count") as? Int)!
+        followersCount = (tweetDictionary.value(forKeyPath: "user.followers_count") as? Int)!
+        followingCount = (tweetDictionary.value(forKeyPath: "user.friends_count") as? Int)!
+        if let profileURLString = tweetDictionary.value(forKeyPath: "user.profile_image_url_https") as? String {
             profileURL = URL(string: profileURLString)
             profileURLHD = URL(string: profileURLString.replacingOccurrences(of: "_normal", with: ""))
         }
-        if let profileBackgroundURLString = dictionary.value(forKeyPath: "user.profile_banner_url") as? String {
+        if let profileBackgroundURLString = tweetDictionary.value(forKeyPath: "user.profile_banner_url") as? String {
             profileBackgroundURL = URL(string: profileBackgroundURLString)
         }
         
-        if let timestampString = dictionary["created_at"] as? String {
+        if let timestampString = tweetDictionary["created_at"] as? String {
             timestamp = dateFormatter.date(from: timestampString)
         }
-        id = dictionary["id_str"] as! String
+        id = tweetDictionary["id_str"] as! String
     }
     
     class func tweetsWithArray(dictionaries : [NSDictionary]) -> [Tweet] {

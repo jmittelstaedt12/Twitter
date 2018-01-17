@@ -7,16 +7,21 @@
 //
 
 import UIKit
+import MBProgressHUD
 
-class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, TweetCellActions, TweetDetailActions{
+class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, TweetCellActions, TweetDetailActions, UIScrollViewDelegate{
 
 
     @IBOutlet weak var tableView: UITableView!
     @IBAction func onLogoutButton(_ sender: Any) {
         TwitterClient.sharedInstance.logout()
     }
+    
     var tweets : [Tweet]!
     var user : User!
+    var isMoreDataLoading = false
+    var tweet_id = ""
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -29,23 +34,21 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.delegate = self
         tableView.estimatedRowHeight = 200
         tableView.rowHeight = UITableViewAutomaticDimension
+        MBProgressHUD.showAdded(to: self.view, animated: true)
         TwitterClient.sharedInstance.homeTimeline(success: { (tweets : [Tweet])
             in
             self.tweets = tweets
-            //self.tableView.reloadData()
             TwitterClient.sharedInstance.currentAccount(success: { (user : User)
                 in
-                self.user = user
-                self.tableView.reloadData()
+                    self.user = user
+                    self.tableView.reloadData()
+                }) { (error) in
+                    print(error.localizedDescription)
+                }
             }) { (error) in
                 print(error.localizedDescription)
             }
-            for tweet in tweets {
-                print(tweet.text!)
-            }
-            }) { (error) in
-            print(error.localizedDescription)
-            }
+        MBProgressHUD.hide(for: self.view, animated: true)
         }
     
     func onRetweet(){
@@ -67,6 +70,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let cell = tableView.dequeueReusableCell(withIdentifier: "TwitterTableViewCell",for: indexPath) as! TwitterTableViewCell
         let ourTweet = self.tweets![indexPath.row]
         cell.tweet = ourTweet
+        tweet_id = ourTweet.id
         cell.delegate = self
         return cell
     }
@@ -90,6 +94,30 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             print(error.localizedDescription)
         }
         
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if !isMoreDataLoading {
+            let scrollViewContentHeight = tableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
+            if scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging{
+                isMoreDataLoading = true
+                MBProgressHUD.showAdded(to: self.view, animated: true)
+                loadMoreData()
+            }
+        }
+    }
+    
+    func loadMoreData(){
+        TwitterClient.sharedInstance.homeTimeline(max_id: tweet_id, success: { (tweets : [Tweet])
+            in
+            self.isMoreDataLoading = false
+            self.tweets.append(contentsOf: tweets)
+            self.tableView.reloadData()
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+        MBProgressHUD.hide(for: self.view, animated: true)
     }
     
     func toggleRetweet(_ tweet: Tweet) {

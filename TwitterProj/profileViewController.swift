@@ -23,7 +23,7 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     var tweet: Tweet?
     var screen_name: String?
-    var userTweets: [Tweet]?
+    var userTweets: [Tweet]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,12 +58,6 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
             self.tweetsTableView.reloadData()
         }
     }
-
-    override func viewDidLayoutSubviews() {
-//        bannerImageView.frame = CGRect(x: 0, y: 0,width: self.view.frame.width, height: bannerImageView.frame.height)
-//
-//        tweetsTableView.reloadData()
-    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -85,10 +79,56 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func toggleRetweet(_ tweet: Tweet) {
 
+        if let index = userTweets.index(of: tweet) {
+            
+            let indexPath = IndexPath(row: index, section: 0)
+            
+            if self.userTweets[index].retweeted{
+                TwitterClient.sharedInstance.unretweetRequest(id: (tweet.id)!, success: { (tweet) in
+                    self.userTweets[index] = tweet
+                    self.tweetsTableView.reloadRows(at: [indexPath], with: .automatic)
+                }) { (error) in
+                    
+                }
+            } else{
+                let favors = self.userTweets[index].favoritesCount
+                TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweet) in
+                    self.userTweets[index] = tweet
+                    self.userTweets[index].favoritesCount = favors
+                    self.tweetsTableView.reloadRows(at: [indexPath], with: .automatic)
+                }) { (error) in
+                    
+                }
+            }
+        }
     }
     
     func toggleFavor(_ tweet: Tweet) {
-        
+        if let index = userTweets.index(of: tweet) {
+            
+            let indexPath = IndexPath(row: index, section: 0)
+            let favors = self.userTweets[index].favoritesCount
+            if self.userTweets[index].favorited{
+                
+                TwitterClient.sharedInstance.unfavorRequest(id: (tweet.id)!, success: { (tweet) in
+                    tweet.favorited = false
+                    tweet.favoritesCount = favors-1
+                    self.userTweets[index] = tweet
+                    self.tweetsTableView.reloadRows(at: [indexPath], with: .automatic)
+                }) { (error) in
+                    print(error.localizedDescription)
+                }
+            } else{
+                
+                TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweet) in
+                    self.userTweets[index] = tweet
+                    self.userTweets[index].favoritesCount = favors+1
+                    self.tweetsTableView.reloadRows(at: [indexPath], with: .automatic)
+                }) { (error) in
+                    
+                }
+            }
+        }
     }
     
     func tweetSegue(_ cell: UITableViewCell) {

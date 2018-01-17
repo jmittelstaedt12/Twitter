@@ -30,7 +30,9 @@ class TwitterClient: BDBOAuth1SessionManager {
                                                         { (requestToken) in
                                                             let url = URL(string:
                                                                 "https://api.twitter.com/oauth/authorize?oauth_token=\((requestToken?.token)!)")!
+                                                            
                                                             UIApplication.shared.open(url)
+                                                            
     }, failure: { (error) in
     print("Error: \(error!.localizedDescription)")
     self.loginFailure?(error!)
@@ -53,9 +55,13 @@ class TwitterClient: BDBOAuth1SessionManager {
         self.loginFailure?(error!)
         }
     }
-    func homeTimeline(success: @escaping (([Tweet]) -> ()), failure : @escaping
+    func homeTimeline(max_id: String = "", success: @escaping (([Tweet]) -> ()), failure : @escaping
         (Error) -> ()) {
-        get("1.1/statuses/home_timeline.json",
+        var getString = "1.1/statuses/home_timeline.json?count=20"
+        if max_id != ""{
+            getString = "1.1/statuses/home_timeline.json?count=20&max_id=\(max_id)"
+        }
+        get(getString,
             parameters: nil,
             progress: nil,
             success: { (task, response) in

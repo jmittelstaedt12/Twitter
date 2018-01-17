@@ -9,13 +9,25 @@
 import UIKit
 
 class TwitterTableViewCell: UITableViewCell {
-
+    
+    @IBOutlet weak var favorImageView: UIImageView!
+    @IBOutlet weak var retweetImageView: UIImageView!
+    @IBOutlet weak var favoriteLabel: UILabel!
+    @IBOutlet weak var retweetLabel: UILabel!
+    @IBOutlet weak var handleLabel: UILabel!
+    @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var tweetLabel: UILabel!
+    @IBOutlet weak var timeStampLabel: UILabel!
+    @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet weak var userRetweetedLabel: UILabel!
+    @IBOutlet weak var retweetedHeightConstraint: NSLayoutConstraint!
+    
     var tweet: Tweet?{
         didSet{
             
             usernameLabel.text = tweet?.name
             handleLabel.text = "@" + (tweet?.screenName)!
-            
+            userRetweetedLabel.text = (tweet?.retweeterName)! + " Retweeted"
             retweetLabel.text = "\((tweet?.retweetCount)!)"
             favoriteLabel.text = "\((tweet?.favoritesCount)!)"
             tweetLabel.text = tweet?.text
@@ -31,7 +43,6 @@ class TwitterTableViewCell: UITableViewCell {
             } else{
                 favorImageView.image = #imageLiteral(resourceName: "favor-icon")
             }
-            //cell.timeStampLabel.text = "\((ourTweet.timestamp)!)"
             let today = NSDate.init()
             var timeSince = Int(today.timeIntervalSince((tweet?.timestamp)!))
             if timeSince < 3600{
@@ -46,18 +57,13 @@ class TwitterTableViewCell: UITableViewCell {
             }
             profileImageView.setImageWith((tweet?.profileURL)!)
 
+            if tweet?.retweeterName == ""{
+                retweetedHeightConstraint.constant = 0
+            }else{
+                retweetedHeightConstraint.constant = 20
+            }
         }
     }
-    
-    @IBOutlet weak var favorImageView: UIImageView!
-    @IBOutlet weak var retweetImageView: UIImageView!
-    @IBOutlet weak var favoriteLabel: UILabel!
-    @IBOutlet weak var retweetLabel: UILabel!
-    @IBOutlet weak var handleLabel: UILabel!
-    @IBOutlet weak var usernameLabel: UILabel!
-    @IBOutlet weak var tweetLabel: UILabel!
-    @IBOutlet weak var timeStampLabel: UILabel!
-    @IBOutlet weak var profileImageView: UIImageView!
     
     weak var delegate: TweetCellActions?
     
@@ -65,7 +71,6 @@ class TwitterTableViewCell: UITableViewCell {
         super.awakeFromNib()
         setupGestures()
     }
-    
     func setupGestures(){
 
         let toggleRetweet = UITapGestureRecognizer(target: self, action: #selector(toggleRetweet(_:)))
