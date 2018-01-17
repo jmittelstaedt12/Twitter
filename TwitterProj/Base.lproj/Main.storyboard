@@ -73,7 +73,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="124.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A6F-i6-7rz">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Username" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A6F-i6-7rz">
                                                     <rect key="frame" x="56" y="26" width="75" height="18"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                     <nil key="highlightedColor"/>
@@ -97,7 +97,7 @@
                                                         <constraint firstAttribute="height" constant="38" id="xfi-yH-nqv"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" text="@twitterhandle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EA2-xy-ezn">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" text="@twitterhandle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EA2-xy-ezn">
                                                     <rect key="frame" x="137" y="27" width="98" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -599,6 +599,7 @@
                                             <outlet property="tweetLabel" destination="4XD-lK-TOA" id="TTE-bN-mAd"/>
                                             <outlet property="userRetweetedLabel" destination="PVt-SJ-mcq" id="JxU-HC-GVd"/>
                                             <outlet property="usernameLabel" destination="Y5S-U0-Gm9" id="dxp-R2-CtB"/>
+                                            <segue destination="G6T-49-lgx" kind="presentation" identifier="profileTweetTapSegue" id="p2m-o1-Drx"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -810,7 +811,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Igq-M6-joc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3768.75" y="948.59154929577471"/>
+            <point key="canvasLocation" x="3769" y="957"/>
         </scene>
         <!--Reply View Controller-->
         <scene sceneID="CsB-V6-Eac">
@@ -891,7 +892,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CqF-mw-52j" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5671.875" y="948.59154929577471"/>
+            <point key="canvasLocation" x="5653" y="957"/>
         </scene>
         <!--New Tweet View Controller-->
         <scene sceneID="Oed-7l-4d9">
@@ -1035,7 +1036,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LgV-Tv-ech" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2852" y="949"/>
+            <point key="canvasLocation" x="2852" y="957"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="nWo-Ds-hfa">
@@ -1054,7 +1055,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ual-Pg-e4q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4641" y="949"/>
+            <point key="canvasLocation" x="4644" y="957"/>
         </scene>
     </scenes>
     <resources>
@@ -1063,4 +1064,7 @@
         <image name="reply-icon" width="30" height="30"/>
         <image name="retweet-icon" width="30" height="30"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="bes-Sj-J98"/>
+    </inferredMetricsTieBreakers>
 </document>

@@ -132,11 +132,24 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tweetSegue(_ cell: UITableViewCell) {
-        
+        performSegue(withIdentifier: "profileTweetTapSegue", sender: cell)
     }
     
     func profileSegue(_ cell: UITableViewCell) {
         
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if(segue.identifier == "profileTweetTapSegue") {
+            let cell = sender as! UITableViewCell
+            let indexPath = tweetsTableView.indexPath(for: cell)
+            let tweet = userTweets[indexPath!.row]
+            let navVC = segue.destination as? UINavigationController
+            let detailedVC = navVC?.viewControllers.first as! TweetDetailsViewController
+            
+            detailedVC.tweet = tweet
+            
+        }
     }
 
 }

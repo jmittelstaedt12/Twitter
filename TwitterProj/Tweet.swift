@@ -46,7 +46,7 @@ class Tweet: NSObject {
         }
         screenName = tweetDictionary.value(forKeyPath: "user.screen_name") as? String
         name = tweetDictionary.value(forKeyPath: "user.name") as? String
-        text = tweetDictionary["text"] as? String
+        text = tweetDictionary["full_text"] as? String
         retweetCount = (tweetDictionary["retweet_count"] as? Int) ?? 0
         favoritesCount = (tweetDictionary["favorite_count"] as? Int) ?? 0
         retweeted = (tweetDictionary.value(forKeyPath: "retweeted") as? Bool)!
