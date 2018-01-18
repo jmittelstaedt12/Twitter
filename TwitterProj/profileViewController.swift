@@ -10,6 +10,8 @@ import UIKit
 
 class profileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, TweetCellActions{
     
+    
+    
     @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var bannerImageView: UIImageView!
@@ -78,31 +80,34 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func toggleRetweet(_ tweet: Tweet) {
-
         if let index = userTweets.index(of: tweet) {
             
             let indexPath = IndexPath(row: index, section: 0)
-            
+            let favors = self.userTweets[index].favoritesCount
+            let retweets = self.userTweets[index].retweetCount
             if self.userTweets[index].retweeted{
                 TwitterClient.sharedInstance.unretweetRequest(id: (tweet.id)!, success: { (tweet) in
+                    tweet.retweetCount = retweets-1
+                    tweet.retweeted = false
                     self.userTweets[index] = tweet
                     self.tweetsTableView.reloadRows(at: [indexPath], with: .automatic)
                 }) { (error) in
                     
                 }
             } else{
-                let favors = self.userTweets[index].favoritesCount
                 TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweet) in
+                    tweet.retweetCount = retweets+1
+                    tweet.retweeted = true
                     self.userTweets[index] = tweet
-                    self.userTweets[index].favoritesCount = favors
                     self.tweetsTableView.reloadRows(at: [indexPath], with: .automatic)
                 }) { (error) in
                     
                 }
             }
+            self.userTweets[index].favoritesCount = favors
         }
     }
-    
+
     func toggleFavor(_ tweet: Tweet) {
         if let index = userTweets.index(of: tweet) {
             
@@ -111,8 +116,8 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
             if self.userTweets[index].favorited{
                 
                 TwitterClient.sharedInstance.unfavorRequest(id: (tweet.id)!, success: { (tweet) in
-                    tweet.favorited = false
                     tweet.favoritesCount = favors-1
+                    tweet.favorited = false
                     self.userTweets[index] = tweet
                     self.tweetsTableView.reloadRows(at: [indexPath], with: .automatic)
                 }) { (error) in
@@ -121,8 +126,9 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
             } else{
                 
                 TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweet) in
+                    tweet.favoritesCount = favors+1
+                    tweet.favorited = true
                     self.userTweets[index] = tweet
-                    self.userTweets[index].favoritesCount = favors+1
                     self.tweetsTableView.reloadRows(at: [indexPath], with: .automatic)
                 }) { (error) in
                     

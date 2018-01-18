@@ -23,13 +23,9 @@ class replyViewController: UIViewController, UITextViewDelegate {
         
         replyText = "@" + replyHandle + " " + replyTextView.text
         
-        print(replyHandle)
         let paramsDict: NSDictionary = NSDictionary(dictionary: ["status" : replyText!,"in_reply_to_status_id" : replyID!])
         
         TwitterClient.sharedInstance.createTweet(tweetText: replyText!, params: paramsDict, completion: { (error) -> () in
-            
-            print("Composing")
-            
             print(error?.localizedDescription as Any)
             
         })

@@ -38,7 +38,6 @@ class TweetDetailsViewController: UIViewController {
         let dateformatter = DateFormatter()
         dateformatter.dateFormat = "MM/dd/yy, h:mm a"
         let ourDate = dateformatter.string(from: ourTimeStamp)
-        print(ourDate)
         timeStampLabel.text = ourDate
         retweetLabel.text = "\((tweet?.retweetCount)!)"
         favoritesLabel.text = "\((tweet?.favoritesCount)!)"
@@ -90,10 +89,6 @@ class TweetDetailsViewController: UIViewController {
             let replyVC = navVC?.viewControllers.first as! replyViewController
             let tweetPass = self.tweet
             replyVC.tweet = tweetPass
-            
-            
-            print("hey")
-
         }
     }
 }

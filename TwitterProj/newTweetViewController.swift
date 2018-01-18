@@ -24,7 +24,6 @@ class newTweetViewController: UIViewController, UITextViewDelegate {
         let paramsDict: NSDictionary = NSDictionary(dictionary: ["status" : tweetText!])
         
         TwitterClient.sharedInstance.createTweet(tweetText: tweetText!, params: paramsDict, completion: { (error) -> () in
-            print("Composing")
             print(error?.localizedDescription as Any)
         })
         

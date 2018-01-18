@@ -65,47 +65,41 @@ class TwitterClient: BDBOAuth1SessionManager {
             parameters: nil,
             progress: nil,
             success: { (task, response) in
-                print("this succeeded")
+                print("timeline request succeeded")
                 let dictionaries = response as! [NSDictionary]
-                
                 let tweets = Tweet.tweetsWithArray(dictionaries:
                     dictionaries)
                 success(tweets)
     }, failure: { (task, error) in
-        print("this failed")
+        print("Error: \(error.localizedDescription)")
         failure(error)
     })
     }
     
     func retweetRequest(id : String, success: @escaping ((Tweet) -> ()), failure : @escaping
         (Error) -> ()) {
-        post("1.1/statuses/retweet/\(id).json",
+        post("1.1/statuses/retweet/\(id).json?tweet_mode=extended",
             parameters: nil,
             progress: nil,
             success: { (task, response) in
                     print("retweet succeeded")
                     let dictionary = response as! NSDictionary
                     let tweet = Tweet(dictionary: dictionary)
-                    print("retweetcount: \(tweet.retweetCount)")
-                    print("favorcount: \(tweet.favoritesCount)")
                 success(tweet)
         }, failure: { (task, error) in
-            print("1.1/statuses/retweet/\(id).json")
             print("retweet failed \(error.localizedDescription)")
             failure(error)
         })
     }
     func favorRequest(id : String, success: @escaping ((Tweet) -> ()), failure : @escaping
         (Error) -> ()) {
-        post("1.1/favorites/create.json?id=\(id)",
+        post("1.1/favorites/create.json?id=\(id)&tweet_mode=extended",
             parameters: nil,
             progress: nil,
             success: { (task, response) in
                 print("favor succeeded")
                 let dictionary = response as! NSDictionary
                 let tweet = Tweet(dictionary: dictionary)
-                print("retweetcount: \(tweet.retweetCount)")
-                print("favorcount: \(tweet.favoritesCount)")
                 success(tweet)
         }, failure: { (task, error) in
             print("favor failed \(error.localizedDescription)")
@@ -121,7 +115,7 @@ class TwitterClient: BDBOAuth1SessionManager {
                 print("tweet succeeded: \(tweetText)")
                 completion(nil)
         }, failure: { (operation: URLSessionDataTask?, error: Error?) -> Void in
-            print("Couldn't compose")
+            print("Error: \(error!.localizedDescription)")
             completion(error as Error?)
         })
     }
@@ -141,7 +135,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     
     func unretweetRequest(id : String, success: @escaping ((Tweet) -> ()), failure : @escaping
         (Error) -> ()) {
-        post("1.1/statuses/unretweet/\(id).json",parameters: nil,progress: nil,
+        post("1.1/statuses/unretweet/\(id).json?tweet_mode=extended",parameters: nil,progress: nil,
              success: {(task, response) in
                 
                 let dictionary = response as! NSDictionary
@@ -155,7 +149,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     }
     func unfavorRequest(id : String, success: @escaping ((Tweet) -> ()), failure : @escaping
         (Error) -> ()) {
-        post("1.1/favorites/destroy.json?id=\(id)",parameters: nil,progress: nil,
+        post("1.1/favorites/destroy.json?id=\(id)&tweet_mode=extended",parameters: nil,progress: nil,
              success: {(task, response) in
                 
                 let dictionary = response as! NSDictionary
@@ -167,7 +161,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     
     func userTimelineRequest(screen_name : String, success: @escaping (([Tweet]) -> ()), failure : @escaping
         (Error) -> ()){
-        get("1.1/statuses/user_timeline.json?screen_name=\(screen_name)&count=20",parameters: nil,progress: nil,
+        get("1.1/statuses/user_timeline.json?screen_name=\(screen_name)&count=20&tweet_mode=extended",parameters: nil,progress: nil,
             success: {(task, response) in
                 let dictionaries = response as! [NSDictionary]
                 let tweets = Tweet.tweetsWithArray(dictionaries: dictionaries)

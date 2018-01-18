@@ -21,11 +21,9 @@ class User: NSObject {
         
         name = dictionary["name"] as? String
         screenName = dictionary["screen_name"] as? String
-        print(screenName as Any)
         
         if let profileURLString = dictionary["profile_image_url_https"] as?
             String {
-            print(profileURLString.replacingOccurrences(of: "_normal", with: ""))
             profileURL = URL(string: profileURLString.replacingOccurrences(of: "_normal", with: ""))
             
         }

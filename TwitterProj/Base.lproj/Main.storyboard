@@ -172,8 +172,7 @@
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="retweet-icon" translatesAutoresizingMaskIntoConstraints="NO" id="iw0-Ep-x2e">
                                                             <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="20" id="1g0-Lm-YPP"/>
-                                                                <constraint firstAttribute="width" constant="20" id="HOP-qQ-Hsr"/>
+                                                                <constraint firstAttribute="width" constant="20" id="Wor-Ur-8sa"/>
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="User Retweeted Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jya-B8-wgD">
@@ -184,16 +183,22 @@
                                                         </label>
                                                     </subviews>
                                                     <constraints>
+                                                        <constraint firstItem="iw0-Ep-x2e" firstAttribute="top" secondItem="wwe-6k-AxS" secondAttribute="top" id="2MY-EQ-LGm"/>
+                                                        <constraint firstAttribute="bottom" secondItem="iw0-Ep-x2e" secondAttribute="bottom" id="DA2-uM-pru"/>
+                                                        <constraint firstItem="jya-B8-wgD" firstAttribute="leading" secondItem="iw0-Ep-x2e" secondAttribute="trailing" id="JDM-8G-psg"/>
+                                                        <constraint firstAttribute="trailing" secondItem="jya-B8-wgD" secondAttribute="trailing" id="LoZ-uC-5Wq"/>
+                                                        <constraint firstAttribute="bottom" secondItem="jya-B8-wgD" secondAttribute="bottom" id="Ua1-K5-IdZ"/>
                                                         <constraint firstAttribute="height" constant="20" id="frJ-vR-PPh"/>
+                                                        <constraint firstItem="jya-B8-wgD" firstAttribute="top" secondItem="wwe-6k-AxS" secondAttribute="top" id="v56-Ba-3vC"/>
+                                                        <constraint firstItem="iw0-Ep-x2e" firstAttribute="leading" secondItem="wwe-6k-AxS" secondAttribute="leading" id="v73-W8-uhK"/>
                                                     </constraints>
                                                 </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="EAy-K4-5eL" secondAttribute="bottom" constant="54" id="09I-ag-9BV"/>
+                                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="EAy-K4-5eL" secondAttribute="bottom" constant="30" id="09I-ag-9BV"/>
                                                 <constraint firstItem="A6F-i6-7rz" firstAttribute="top" secondItem="EAy-K4-5eL" secondAttribute="top" constant="-2" id="1D3-cZ-dbO"/>
                                                 <constraint firstItem="wwe-6k-AxS" firstAttribute="leading" secondItem="iuz-V3-QSv" secondAttribute="leading" constant="30" id="9ML-j0-lwh"/>
                                                 <constraint firstItem="TnT-pp-QwF" firstAttribute="leading" secondItem="iuz-V3-QSv" secondAttribute="leading" constant="56" id="9S1-7x-GUr"/>
-                                                <constraint firstItem="YHZ-ci-ycB" firstAttribute="leading" secondItem="EAy-K4-5eL" secondAttribute="trailing" constant="10" id="9io-FN-YH0"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="wwe-6k-AxS" secondAttribute="trailing" constant="8" id="9pf-Pq-FoB"/>
                                                 <constraint firstAttribute="trailing" secondItem="TnT-pp-QwF" secondAttribute="trailing" constant="34" id="EFb-KR-gq2"/>
                                                 <constraint firstItem="w2v-VF-S1J" firstAttribute="centerY" secondItem="A6F-i6-7rz" secondAttribute="centerY" id="EPf-WJ-QH9"/>

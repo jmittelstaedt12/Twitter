@@ -12,6 +12,7 @@ class Tweet: NSObject {
     
     var retweeterName: String?
     var tweetDictionary: NSDictionary!
+    var retweetOfRetweetName: String?
     var name: String?
     var screenName: String?
     var profileURL: URL?
