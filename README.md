@@ -5,22 +5,26 @@
 ## Features
 
 - User can sign in using OAuth login flow
-- User can view last 20 tweets from their home timeline
+- User can view their home timeline with infinite scrolling
 - The current signed in user will be persisted across restarts
 - In the home timeline, user can view tweet with the user profile picture, username, tweet text, and timestamp.
 - Retweeting and favoriting should increment the retweet and favorite count.
-- Tweet Details Page: User can tap on a tweet to view it, with controls to retweet, favorite, and reply.
-- Profile page:
+- User can unfavor and unretweet any tweet they previously favored/retweeted
+- Tweet Details Page:
+- User can tap on a tweet to view it, with controls to retweet, favorite, and reply.
+- Profile Page:
+- Tapping on a user image brings up that user's profile page
 - Contains the user header view
 - Contains a section with the users basic stats: # tweets, # following, # followers
-- Home Timeline: Tapping on a user image brings up that user's profile page
-- Compose Page: User can compose a new tweet by tapping on a compose button.
+- Contains a user timeline of that user's tweets and retweets
+- Compose Page: 
+- User can compose a new tweet by tapping on a compose button.
 
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://i.imgur.com/TBm1GWQ.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/zdvAnXT.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
