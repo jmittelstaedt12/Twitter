@@ -62,6 +62,7 @@ class TwitterTableViewCell: UITableViewCell {
             }else{
                 retweetedHeightConstraint.constant = 20
             }
+            
         }
     }
     

@@ -32,7 +32,6 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         usernameLabel.text = tweet?.name
         handleLabel.text = "@" + (tweet?.screenName)!
-        
         profileImageView.setImageWith((tweet?.profileURLHD)!)
         
         if let backgroundURL = tweet?.profileBackgroundURL{

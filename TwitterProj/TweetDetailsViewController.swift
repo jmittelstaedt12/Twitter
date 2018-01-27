@@ -19,20 +19,20 @@ class TweetDetailsViewController: UIViewController {
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var retweetImageView: UIImageView!
     @IBOutlet weak var favoriteImageView: UIImageView!
+    @IBOutlet weak var userRetweetedLabel: UILabel!
+    @IBOutlet weak var retweetHeightConstraint: NSLayoutConstraint!
     
     @IBAction func homeButton(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
     }
     
-    weak var delegate: TweetDetailActions?
-    var tweet: Tweet?
-
+    var tweet: Tweet!
+    
     override func viewDidLoad() {
-        super.viewDidLoad()
-
-        setupGestures()
+        super.viewDidLoad()        
         usernameLabel.text = tweet?.name
         handleLabel.text = "@" + (tweet?.screenName)!
+        userRetweetedLabel.text = (tweet?.retweeterName!)! + " Retweeted"
         tweetLabel.text = tweet?.text
         let ourTimeStamp: Date = (tweet?.timestamp)!
         let dateformatter = DateFormatter()
@@ -54,31 +54,73 @@ class TweetDetailsViewController: UIViewController {
         } else{
             favoriteImageView.image = #imageLiteral(resourceName: "favor-icon")
         }
-
-    }
-    
-    func setupGestures(){
-        let tapFavor = UITapGestureRecognizer(target: self, action: #selector(favorDetailTweet(_:)))
-        favoriteImageView.addGestureRecognizer(tapFavor)
+        profileImageView.isUserInteractionEnabled = true
         favoriteImageView.isUserInteractionEnabled = true
-        
-        let tapRetweet = UITapGestureRecognizer(target: self, action: #selector(retweetDetail(_:)))
-        retweetImageView.addGestureRecognizer(tapRetweet)
         retweetImageView.isUserInteractionEnabled = true
-    }
-    @objc private func favorDetailTweet(_ gesture: UITapGestureRecognizer){
-        delegate?.favorDetailTweet(tweet!)
-        TwitterClient.sharedInstance.favorRequest(id: (self.tweet?.id)!, success: { (tweet) in
-            
-        }) { (error) in
-            
+        let profileTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tapProfile))
+        profileImageView.addGestureRecognizer(profileTapGestureRecognizer)
+        let favorTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tapFavor))
+        favoriteImageView.addGestureRecognizer(favorTapGestureRecognizer)
+        let retweetTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tapRetweet))
+        retweetImageView.addGestureRecognizer(retweetTapGestureRecognizer)
+        
+        if tweet?.retweeterName == ""{
+            retweetHeightConstraint.constant = 0
+        }else{
+            retweetHeightConstraint.constant = 20
         }
     }
-    func retweetDetail(_ gesture: UITapGestureRecognizer){
-        delegate?.retweetDetail(tweet!)
-        TwitterClient.sharedInstance.retweetRequest(id: (self.tweet?.id)!, success: { (tweet) in
-        }) { (error) in
-            
+    
+    func tapProfile(){
+        performSegue(withIdentifier: "profileSegue", sender: tweet)
+    }
+    func tapRetweet(){
+
+        let favors = tweet.favoritesCount
+        let retweets = tweet.retweetCount
+            if tweet.retweeted{
+                TwitterClient.sharedInstance.unretweetRequest(id: (tweet.id)!, success: { (tweetBack) in
+                    tweetBack.retweetCount = retweets-1
+                    tweetBack.retweeted = false
+                    self.tweet = tweetBack
+                    self.viewDidLoad()
+                }) { (error) in
+                    print(error.localizedDescription)
+                }
+            } else{
+                TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweetBack) in
+                    tweetBack.retweetCount = retweets+1
+                    tweetBack.retweeted = true
+                    self.tweet = tweetBack
+                    self.viewDidLoad()
+                }) { (error) in
+                    print(error.localizedDescription)
+                }
+            }
+            tweet.favoritesCount = favors
+    }
+    
+    func tapFavor(){
+        
+        let favors = tweet.favoritesCount
+        if tweet.favorited{
+            TwitterClient.sharedInstance.unfavorRequest(id: (tweet.id)!, success: { (tweetBack) in
+                tweetBack.favoritesCount = favors-1
+                tweetBack.favorited = false
+                self.tweet = tweetBack
+                self.viewDidLoad()
+            }) { (error) in
+                print(error.localizedDescription)
+            }
+        } else{
+            TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweetBack) in
+                tweetBack.favoritesCount = favors+1
+                tweetBack.favorited = true
+                self.tweet = tweetBack
+                self.viewDidLoad()
+            }) { (error) in
+                print(error.localizedDescription)
+            }
         }
     }
 
@@ -90,9 +132,11 @@ class TweetDetailsViewController: UIViewController {
             let tweetPass = self.tweet
             replyVC.tweet = tweetPass
         }
+        
+        if(segue.identifier == "profileSegue"){
+            let profileVC = segue.destination as! profileViewController
+            profileVC.tweet = self.tweet
+            profileVC.screen_name = self.tweet.screenName
+        }
     }
-}
-protocol TweetDetailActions: class{
-    func favorDetailTweet(_ tweet: Tweet)
-    func retweetDetail(_ tweet: Tweet)
 }

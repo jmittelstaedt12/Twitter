@@ -9,7 +9,7 @@
 import UIKit
 import MBProgressHUD
 
-class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, TweetCellActions, TweetDetailActions, UIScrollViewDelegate{
+class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, TweetCellActions, UIScrollViewDelegate{
 
 
     @IBOutlet weak var tableView: UITableView!
@@ -223,9 +223,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let tweet = tweets[indexPath!.row]
             let navVC = segue.destination as? UINavigationController
             let detailedVC = navVC?.viewControllers.first as! TweetDetailsViewController
-            
             detailedVC.tweet = tweet
-            
         }
         if(segue.identifier == "profileSegue") {
             
@@ -235,7 +233,6 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let profileVC = segue.destination as! profileViewController
             profileVC.tweet = tweet
             profileVC.screen_name = tweet.screenName
-            
         }
         if(segue.identifier == "newTweetSegue"){
             let currentUser = self.user
