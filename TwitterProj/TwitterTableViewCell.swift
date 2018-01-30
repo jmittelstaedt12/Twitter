@@ -20,7 +20,11 @@ class TwitterTableViewCell: UITableViewCell {
     @IBOutlet weak var timeStampLabel: UILabel!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var userRetweetedLabel: UILabel!
+    @IBOutlet weak var imageInTweetView: UIImageView!
     @IBOutlet weak var retweetedHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var imageInTweetHeightConstraint: NSLayoutConstraint!
+    
+    var imageInTweetHeight: Float!
     
     var tweet: Tweet?{
         didSet{
@@ -56,22 +60,45 @@ class TwitterTableViewCell: UITableViewCell {
                 timeStampLabel.text = "\(timeSince)d"
             }
             profileImageView.setImageWith((tweet?.profileURL)!)
-
+            if tweet?.imageInTweetURL != nil{
+                imageInTweetView.setImageWith((tweet?.imageInTweetURL)!)
+                imageInTweetHeightConstraint.priority = 250
+            }else{
+                imageInTweetView.image = nil
+                imageInTweetHeightConstraint.priority = 999
+            }
             if tweet?.retweeterName == ""{
                 retweetedHeightConstraint.constant = 0
             }else{
                 retweetedHeightConstraint.constant = 20
             }
             
+//            if imageInTweetView.image == nil{
+//                imageInTweetHeightConstraint.priority = 999
+//            }else{
+//                imageInTweetHeightConstraint.priority = 250
+//            }
         }
+        
     }
-    
     weak var delegate: TweetCellActions?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         setupGestures()
+        let imageFrame = self.imageInTweetView.frame
+        if self.imageInTweetView.image == nil{
+            self.imageInTweetView.frame = CGRect(x: imageFrame.origin.x, y: imageFrame.origin.y, width: imageFrame.width, height: 0)
+        }
+        else{
+            self.imageInTweetView.frame = imageFrame
+        }
     }
+    
+    override func prepareForReuse() {
+        
+    }
+    
     func setupGestures(){
 
         let toggleRetweet = UITapGestureRecognizer(target: self, action: #selector(toggleRetweet(_:)))
@@ -109,8 +136,6 @@ class TwitterTableViewCell: UITableViewCell {
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
 }

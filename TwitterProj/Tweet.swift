@@ -28,7 +28,7 @@ class Tweet: NSObject {
     var followersCount: Int = 0
     var followingCount: Int = 0
     var profileBackgroundURL: URL?
-    
+    var imageInTweetURL: URL?
     private var dateFormatter : DateFormatter = {
         
         let dFormatter = DateFormatter()
@@ -55,6 +55,7 @@ class Tweet: NSObject {
         statusCount = (tweetDictionary.value(forKeyPath: "user.statuses_count") as? Int)!
         followersCount = (tweetDictionary.value(forKeyPath: "user.followers_count") as? Int)!
         followingCount = (tweetDictionary.value(forKeyPath: "user.friends_count") as? Int)!
+        id = tweetDictionary["id_str"] as! String
         if let profileURLString = tweetDictionary.value(forKeyPath: "user.profile_image_url_https") as? String {
             profileURL = URL(string: profileURLString)
             profileURLHD = URL(string: profileURLString.replacingOccurrences(of: "_normal", with: ""))
@@ -66,7 +67,12 @@ class Tweet: NSObject {
         if let timestampString = tweetDictionary["created_at"] as? String {
             timestamp = dateFormatter.date(from: timestampString)
         }
-        id = tweetDictionary["id_str"] as! String
+        if let imageInTweetArray = (tweetDictionary.value(forKeyPath: "extended_entities.media")) as? Array<NSDictionary> {
+            imageInTweetURL = URL(string: imageInTweetArray[0].value(forKeyPath: "media_url_https") as! String)
+        }else{
+            imageInTweetURL = nil
+        }
+        
     }
     
     class func tweetsWithArray(dictionaries : [NSDictionary]) -> [Tweet] {

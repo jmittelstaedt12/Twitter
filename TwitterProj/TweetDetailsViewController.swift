@@ -22,6 +22,9 @@ class TweetDetailsViewController: UIViewController {
     @IBOutlet weak var userRetweetedLabel: UILabel!
     @IBOutlet weak var retweetHeightConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var retweetImageLeadingConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var favorImageTrailingConstant: NSLayoutConstraint!
     @IBAction func homeButton(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
     }
@@ -54,6 +57,8 @@ class TweetDetailsViewController: UIViewController {
         } else{
             favoriteImageView.image = #imageLiteral(resourceName: "favor-icon")
         }
+        retweetImageLeadingConstraint.constant = (self.view.frame.width-60)/3
+        favorImageTrailingConstant.constant = retweetImageLeadingConstraint.constant
         profileImageView.isUserInteractionEnabled = true
         favoriteImageView.isUserInteractionEnabled = true
         retweetImageView.isUserInteractionEnabled = true
