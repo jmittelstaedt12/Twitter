@@ -10,15 +10,15 @@ import UIKit
 
 class Tweet: NSObject {
     
-    var retweeterName: String?
+    var retweeterName: String!
     var tweetDictionary: NSDictionary!
     var retweetOfRetweetName: String?
-    var name: String?
-    var screenName: String?
-    var profileURL: URL?
+    var name: String!
+    var screenName: String!
+    var profileURL: URL!
     var profileURLHD: URL?
-    var text: String?
-    var timestamp : Date?
+    var text: String!
+    var timestamp : Date!
     var retweetCount : Int = 0
     var favoritesCount : Int = 0
     var id: String!
@@ -48,13 +48,13 @@ class Tweet: NSObject {
         screenName = tweetDictionary.value(forKeyPath: "user.screen_name") as? String
         name = tweetDictionary.value(forKeyPath: "user.name") as? String
         text = tweetDictionary["full_text"] as? String
-        retweetCount = (tweetDictionary["retweet_count"] as? Int) ?? 0
-        favoritesCount = (tweetDictionary["favorite_count"] as? Int) ?? 0
-        retweeted = (tweetDictionary.value(forKeyPath: "retweeted") as? Bool)!
-        favorited = (tweetDictionary.value(forKeyPath: "favorited") as? Bool)!
+        retweetCount = (tweetDictionary["retweet_count"] as? Int)!
+        favoritesCount = (tweetDictionary["favorite_count"] as? Int)!
         statusCount = (tweetDictionary.value(forKeyPath: "user.statuses_count") as? Int)!
         followersCount = (tweetDictionary.value(forKeyPath: "user.followers_count") as? Int)!
         followingCount = (tweetDictionary.value(forKeyPath: "user.friends_count") as? Int)!
+        retweeted = (tweetDictionary.value(forKeyPath: "retweeted") as? Bool)!
+        favorited = (tweetDictionary.value(forKeyPath: "favorited") as? Bool)!
         id = tweetDictionary["id_str"] as! String
         if let profileURLString = tweetDictionary.value(forKeyPath: "user.profile_image_url_https") as? String {
             profileURL = URL(string: profileURLString)
@@ -72,7 +72,6 @@ class Tweet: NSObject {
         }else{
             imageInTweetURL = nil
         }
-        
     }
     
     class func tweetsWithArray(dictionaries : [NSDictionary]) -> [Tweet] {

@@ -10,17 +10,6 @@ import UIKit
 import BDBOAuth1Manager
 
 class LoginViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     @IBAction func onLoginButton(_ sender: Any) {
         TwitterClient.sharedInstance.login(success: {
@@ -32,7 +21,4 @@ class LoginViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
         }
     }
-    
-    
-
 }

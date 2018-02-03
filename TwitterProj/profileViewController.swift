@@ -26,6 +26,9 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
     var tweet: Tweet?
     var screen_name: String?
     var userTweets: [Tweet]!
+    var statusCountString = ""
+    var followingCountString = ""
+    var followersCountString = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,9 +41,9 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
             bannerImageView.setImageWith(backgroundURL)
         }
         
-        tweetCountLabel.text = "\((tweet?.statusCount)!)"
-        followingCountLabel.text = "\((tweet?.followingCount)!)"
-        followersCountLabel.text = "\((tweet?.followersCount)!)"
+        tweetCountLabel.text = statusCountString
+        followingCountLabel.text = followingCountString
+        followersCountLabel.text = followersCountString
         
         tweetsTableView.dataSource = self
         tweetsTableView.delegate = self
@@ -61,7 +64,6 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         if let tweetcount = self.userTweets?.count {
             return tweetcount
         } else{
@@ -69,8 +71,8 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
         
     }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
-
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileTableViewCell",for: indexPath) as! TwitterTableViewCell
         let ourTweet = self.userTweets![indexPath.row]
         cell.tweet = ourTweet
@@ -80,7 +82,6 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func toggleRetweet(_ tweet: Tweet) {
         if let index = userTweets.index(of: tweet) {
-            
             let indexPath = IndexPath(row: index, section: 0)
             let favors = self.userTweets[index].favoritesCount
             let retweets = self.userTweets[index].retweetCount
@@ -91,7 +92,7 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
                     self.userTweets[index] = tweet
                     self.tweetsTableView.reloadRows(at: [indexPath], with: .automatic)
                 }) { (error) in
-                    
+                    print(error.localizedDescription)
                 }
             } else{
                 TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweet) in
@@ -100,7 +101,7 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
                     self.userTweets[index] = tweet
                     self.tweetsTableView.reloadRows(at: [indexPath], with: .automatic)
                 }) { (error) in
-                    
+                    print(error.localizedDescription)
                 }
             }
             self.userTweets[index].favoritesCount = favors
@@ -109,7 +110,6 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
 
     func toggleFavor(_ tweet: Tweet) {
         if let index = userTweets.index(of: tweet) {
-            
             let indexPath = IndexPath(row: index, section: 0)
             let favors = self.userTweets[index].favoritesCount
             if self.userTweets[index].favorited{
@@ -130,7 +130,7 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
                     self.userTweets[index] = tweet
                     self.tweetsTableView.reloadRows(at: [indexPath], with: .automatic)
                 }) { (error) in
-                    
+                    print(error.localizedDescription)
                 }
             }
         }
@@ -141,7 +141,6 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func profileSegue(_ cell: UITableViewCell) {
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

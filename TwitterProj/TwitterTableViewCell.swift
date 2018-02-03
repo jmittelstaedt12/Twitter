@@ -25,15 +25,16 @@ class TwitterTableViewCell: UITableViewCell {
     @IBOutlet weak var imageInTweetHeightConstraint: NSLayoutConstraint!
     
     var imageInTweetHeight: Float!
-    
+    var retweetCountString = ""
+    var favoritesCountString = ""
     var tweet: Tweet?{
         didSet{
             
             usernameLabel.text = tweet?.name
             handleLabel.text = "@" + (tweet?.screenName)!
             userRetweetedLabel.text = (tweet?.retweeterName)! + " Retweeted"
-            retweetLabel.text = "\((tweet?.retweetCount)!)"
-            favoriteLabel.text = "\((tweet?.favoritesCount)!)"
+            retweetLabel.text = retweetCountString
+            favoriteLabel.text = favoritesCountString
             tweetLabel.text = tweet?.text
             if tweet?.retweeted == true{
                 retweetImageView.image = #imageLiteral(resourceName: "retweet-icon-green")
@@ -72,32 +73,25 @@ class TwitterTableViewCell: UITableViewCell {
             }else{
                 retweetedHeightConstraint.constant = 20
             }
-            
-//            if imageInTweetView.image == nil{
-//                imageInTweetHeightConstraint.priority = 999
-//            }else{
-//                imageInTweetHeightConstraint.priority = 250
-//            }
         }
-        
     }
     weak var delegate: TweetCellActions?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         setupGestures()
-        let imageFrame = self.imageInTweetView.frame
-        if self.imageInTweetView.image == nil{
-            self.imageInTweetView.frame = CGRect(x: imageFrame.origin.x, y: imageFrame.origin.y, width: imageFrame.width, height: 0)
-        }
-        else{
-            self.imageInTweetView.frame = imageFrame
-        }
+//        let imageFrame = self.imageInTweetView.frame
+//        if self.imageInTweetView.image == nil{
+//            self.imageInTweetView.frame = CGRect(x: imageFrame.origin.x, y: imageFrame.origin.y, width: imageFrame.width, height: 0)
+//        }
+//        else{
+//            self.imageInTweetView.frame = imageFrame
+//        }
     }
-    
-    override func prepareForReuse() {
-        
-    }
+//    
+//    override func prepareForReuse() {
+//        
+//    }
     
     func setupGestures(){
 

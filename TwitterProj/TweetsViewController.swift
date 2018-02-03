@@ -23,7 +23,6 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var tweet_id = ""
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         
         let refreshControl = UIRefreshControl()
@@ -51,12 +50,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         MBProgressHUD.hide(for: self.view, animated: true)
         }
     
-    func onRetweet(){
-        
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         if let tweetcount = self.tweets?.count {
             return tweetcount
         } else{
@@ -66,9 +60,10 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "TwitterTableViewCell",for: indexPath) as! TwitterTableViewCell
         let ourTweet = self.tweets![indexPath.row]
+        cell.retweetCountString = shortenNumber(num: ourTweet.retweetCount)
+        cell.favoritesCountString = shortenNumber(num: ourTweet.favoritesCount)
         cell.tweet = ourTweet
         tweet_id = ourTweet.id
         cell.delegate = self
@@ -117,6 +112,20 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         MBProgressHUD.hide(for: self.view, animated: true)
     }
     
+    func shortenNumber(num : Int) -> String{
+        var shortened = "\(num)"
+        if num > 9999{
+            if num > 99999{
+                if num > 999999{
+                    if num > 9999999{
+                        shortened = "\(round((Double(num)*10)/1000000)/10)M"
+                    }else{shortened = "\(round((Double(num)*10)/1000000)/10)M"}
+                }else{shortened = "\(round(Double(num)/1000))K"}
+            }else{shortened = "\(round(Double(num)*10/1000)/10)K"}
+        }
+        return shortened
+    }
+    
     func toggleRetweet(_ tweet: Tweet) {
         if let index = tweets.index(of: tweet) {
             
@@ -150,11 +159,9 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func toggleFavor(_ tweet: Tweet) {
         if let index = tweets.index(of: tweet) {
-            
             let indexPath = IndexPath(row: index, section: 0)
             let favors = self.tweets[index].favoritesCount
             if self.tweets[index].favorited{
-                
                 TwitterClient.sharedInstance.unfavorRequest(id: (tweet.id)!, success: { (tweet) in
                     tweet.favoritesCount = favors-1
                     tweet.favorited = false
@@ -171,7 +178,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     self.tweets[index] = tweet
                     self.tableView.reloadRows(at: [indexPath], with: .automatic)
                 }) { (error) in
-                    
+                    print(error.localizedDescription)
                 }
             }
         }
@@ -181,27 +188,24 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func favorDetailTweet(_ tweet: Tweet) {
         if let index = tweets.index(of: tweet) {
             let indexPath = IndexPath(row: index, section: 0)
-            
             TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweet) in
                 self.tweets[index] = tweet
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                
             }) { (error) in
-                
+                print(error.localizedDescription)
             }
         }
     }
     
     func retweetDetail(_ tweet: Tweet) {
         if let index = tweets.index(of: tweet) {
-            
             let indexPath = IndexPath(row: index, section: 0)
             TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweet) in
                 self.tweets[index] = tweet
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
                 
             }) { (error) in
-                
+                print(error.localizedDescription)
             }
         }
     }
@@ -212,7 +216,6 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func profileSegue(_ cell: UITableViewCell) {
-        
         performSegue(withIdentifier: "profileSegue", sender: cell)
     }
     
@@ -224,16 +227,22 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let navVC = segue.destination as? UINavigationController
             let detailedVC = navVC?.viewControllers.first as! TweetDetailsViewController
             detailedVC.tweet = tweet
+            detailedVC.retweetLabelString = shortenNumber(num: tweet.retweetCount)
+            detailedVC.favoriteLabelString = shortenNumber(num: tweet.favoritesCount)
         }
+        
         if(segue.identifier == "profileSegue") {
-            
             let cell = sender as! UITableViewCell
             let indexPath = tableView.indexPath(for: cell)
             let tweet = tweets[indexPath!.row]
             let profileVC = segue.destination as! profileViewController
             profileVC.tweet = tweet
             profileVC.screen_name = tweet.screenName
+            profileVC.statusCountString = shortenNumber(num: tweet.statusCount)
+            profileVC.followersCountString = shortenNumber(num: tweet.followersCount)
+            profileVC.followingCountString = shortenNumber(num: tweet.followingCount)
         }
+        
         if(segue.identifier == "newTweetSegue"){
             let currentUser = self.user
             let navVC = segue.destination as? UINavigationController
