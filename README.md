@@ -10,7 +10,7 @@
 - In the home timeline, user can view tweet with the user profile picture, username, tweet text, and timestamp.
 - Retweeting and favoriting should increment the retweet and favorite count.
 - User can unfavor and unretweet any tweet they previously favored/retweeted
-Tweet Details Page:
+**Tweet Details Page:**
 - User can tap on a tweet to view it, with controls to retweet, favorite, and reply
 - User can view replies to tweets on their timeline
 Profile Page:
