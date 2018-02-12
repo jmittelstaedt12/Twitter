@@ -34,8 +34,6 @@ class TweetDetailsViewController: UIViewController, UITableViewDelegate, UITable
     
     var tweet: Tweet!
     var replyTweets: [Tweet]?
-    var retweetLabelString: String = ""
-    var favoriteLabelString: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()        
@@ -48,8 +46,8 @@ class TweetDetailsViewController: UIViewController, UITableViewDelegate, UITable
         dateformatter.dateFormat = "MM/dd/yy, h:mm a"
         let ourDate = dateformatter.string(from: ourTimeStamp)
         timeStampLabel.text = ourDate
-        retweetLabel.text = retweetLabelString
-        favoritesLabel.text = favoriteLabelString
+        retweetLabel.text = Tweet.shortenNumber(num: tweet.retweetCount)
+        favoritesLabel.text = Tweet.shortenNumber(num: tweet.favoritesCount)
         profileImageView.setImageWith((tweet?.profileURLHD)!)
         if tweet?.retweeted == true{
             retweetImageView.image = #imageLiteral(resourceName: "retweet-icon-green")

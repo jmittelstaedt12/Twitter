@@ -25,53 +25,53 @@ class TwitterTableViewCell: UITableViewCell {
     @IBOutlet weak var imageInTweetHeightConstraint: NSLayoutConstraint!
     
     var imageInTweetHeight: Float!
-    var retweetCountString = ""
-    var favoritesCountString = ""
+
     var tweet: Tweet?{
         didSet{
-            
-            usernameLabel.text = tweet?.name
-            handleLabel.text = "@" + (tweet?.screenName)!
-            userRetweetedLabel.text = (tweet?.retweeterName)! + " Retweeted"
-            retweetLabel.text = retweetCountString
-            favoriteLabel.text = favoritesCountString
-            tweetLabel.text = tweet?.text
-            if tweet?.retweeted == true{
-                retweetImageView.image = #imageLiteral(resourceName: "retweet-icon-green")
-                
-            } else{
-                retweetImageView.image = #imageLiteral(resourceName: "retweet-icon")
-            }
-            if tweet?.favorited == true{
-                favorImageView.image = #imageLiteral(resourceName: "favor-icon-red")
-                
-            } else{
-                favorImageView.image = #imageLiteral(resourceName: "favor-icon")
-            }
-            let today = NSDate.init()
-            var timeSince = Int(today.timeIntervalSince((tweet?.timestamp)!))
-            if timeSince < 3600{
-                timeSince = timeSince/60
-                timeStampLabel.text = "\(timeSince)m"
-            } else if timeSince < 86400{
-                timeSince = timeSince/3600
-                timeStampLabel.text = "\(timeSince)h"
-            } else{
-                timeSince = timeSince/86400
-                timeStampLabel.text = "\(timeSince)d"
-            }
-            profileImageView.setImageWith((tweet?.profileURL)!)
-            if tweet?.imageInTweetURL != nil{
-                imageInTweetView.setImageWith((tweet?.imageInTweetURL)!)
-                imageInTweetHeightConstraint.priority = 250
-            }else{
-                imageInTweetView.image = nil
-                imageInTweetHeightConstraint.priority = 999
-            }
-            if tweet?.retweeterName == ""{
-                retweetedHeightConstraint.constant = 0
-            }else{
-                retweetedHeightConstraint.constant = 20
+            if let tweet = tweet{
+                usernameLabel.text = tweet.name
+                handleLabel.text = "@" + tweet.screenName
+                userRetweetedLabel.text = tweet.retweeterName + " Retweeted"
+                retweetLabel.text = Tweet.shortenNumber(num: tweet.retweetCount)
+                favoriteLabel.text = Tweet.shortenNumber(num: tweet.favoritesCount)
+                tweetLabel.text = tweet.text
+                if tweet.retweeted == true{
+                    retweetImageView.image = #imageLiteral(resourceName: "retweet-icon-green")
+                    
+                } else{
+                    retweetImageView.image = #imageLiteral(resourceName: "retweet-icon")
+                }
+                if tweet.favorited == true{
+                    favorImageView.image = #imageLiteral(resourceName: "favor-icon-red")
+                    
+                } else{
+                    favorImageView.image = #imageLiteral(resourceName: "favor-icon")
+                }
+                let today = NSDate.init()
+                var timeSince = Int(today.timeIntervalSince(tweet.timestamp))
+                if timeSince < 3600{
+                    timeSince = timeSince/60
+                    timeStampLabel.text = "\(timeSince)m"
+                } else if timeSince < 86400{
+                    timeSince = timeSince/3600
+                    timeStampLabel.text = "\(timeSince)h"
+                } else{
+                    timeSince = timeSince/86400
+                    timeStampLabel.text = "\(timeSince)d"
+                }
+                profileImageView.setImageWith(tweet.profileURL)
+                if let imageInTweetURL = tweet.imageInTweetURL{
+                    imageInTweetView.setImageWith(imageInTweetURL)
+                    imageInTweetHeightConstraint.priority = 250
+                }else{
+                    imageInTweetView.image = nil
+                    imageInTweetHeightConstraint.priority = 999
+                }
+                if tweet.retweeterName == ""{
+                    retweetedHeightConstraint.constant = 0
+                }else{
+                    retweetedHeightConstraint.constant = 20
+                }
             }
         }
     }

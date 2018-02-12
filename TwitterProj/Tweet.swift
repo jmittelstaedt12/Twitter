@@ -16,18 +16,18 @@ class Tweet: NSObject {
     var name: String!
     var screenName: String!
     var profileURL: URL!
-    var profileURLHD: URL?
+    var profileURLHD: URL!
     var text: String!
     var timestamp : Date!
     var retweetCount : Int = 0
     var favoritesCount : Int = 0
     var id: String!
-    var retweeted: Bool
-    var favorited: Bool
+    var retweeted: Bool!
+    var favorited: Bool!
     var statusCount: Int = 0
     var followersCount: Int = 0
     var followingCount: Int = 0
-    var profileBackgroundURL: URL?
+    var profileBackgroundURL: URL!
     var imageInTweetURL: URL?
     private var dateFormatter : DateFormatter = {
         
@@ -82,5 +82,19 @@ class Tweet: NSObject {
             dictionary)) }
         
         return tweets
+    }
+    
+    class func shortenNumber(num : Int) -> String{
+        var shortened = "\(num)"
+        if num > 9999{
+            if num > 99999{
+                if num > 999999{
+                    if num > 9999999{
+                        shortened = "\(round((Double(num)*10)/1000000)/10)M"
+                    }else{shortened = "\(round((Double(num)*100)/1000000)/100)M"}
+                }else{shortened = "\(Int(round(Double(num)/1000)))K"}
+            }else{shortened = "\(round(Double(num)*10/1000)/10)K"}
+        }
+        return shortened
     }
 }

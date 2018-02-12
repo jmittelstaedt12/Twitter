@@ -26,40 +26,39 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
     var tweet: Tweet?
     var screen_name: String?
     var userTweets: [Tweet]!
-    var statusCountString = ""
-    var followingCountString = ""
-    var followersCountString = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        usernameLabel.text = tweet?.name
-        handleLabel.text = "@" + (tweet?.screenName)!
-        profileImageView.setImageWith((tweet?.profileURLHD)!)
-        
-        if let backgroundURL = tweet?.profileBackgroundURL{
-            bannerImageView.setImageWith(backgroundURL)
-        }
-        
-        tweetCountLabel.text = statusCountString
-        followingCountLabel.text = followingCountString
-        followersCountLabel.text = followersCountString
-        
-        tweetsTableView.dataSource = self
-        tweetsTableView.delegate = self
-        tweetsTableView.estimatedRowHeight = 200
-        tweetsTableView.rowHeight = UITableViewAutomaticDimension
-        tweetsTableView.tableHeaderView = headerView
-        TwitterClient.sharedInstance.userTimelineRequest(screen_name: screen_name!, success: { (tweets: [Tweet]) in
-            self.userTweets = tweets
-            self.tweetsTableView.reloadData()
-        }) { (error: Error) in
-            print(error.localizedDescription)
+        if let tweet = tweet{
+            usernameLabel.text = tweet.name
+            handleLabel.text = "@" + tweet.screenName
+            profileImageView.setImageWith(tweet.profileURLHD)
             
-        }
-        DispatchQueue.main.async {
-            self.tweetsTableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.bannerImageView.frame.height+71.5)
-            self.tweetsTableView.reloadData()
+            if let backgroundURL = tweet.profileBackgroundURL{
+                bannerImageView.setImageWith(backgroundURL)
+            }
+            
+            tweetCountLabel.text = Tweet.shortenNumber(num: tweet.statusCount)
+            followingCountLabel.text = Tweet.shortenNumber(num: tweet.followingCount)
+            followersCountLabel.text = Tweet.shortenNumber(num: tweet.followersCount)
+            
+            tweetsTableView.dataSource = self
+            tweetsTableView.delegate = self
+            tweetsTableView.estimatedRowHeight = 200
+            tweetsTableView.rowHeight = UITableViewAutomaticDimension
+            tweetsTableView.tableHeaderView = headerView
+            TwitterClient.sharedInstance.userTimelineRequest(screen_name: screen_name!, success: { (tweets: [Tweet]) in
+                self.userTweets = tweets
+                self.tweetsTableView.reloadData()
+            }) { (error: Error) in
+                print(error.localizedDescription)
+                
+            }
+            DispatchQueue.main.async {
+                self.tweetsTableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.bannerImageView.frame.height+71.5)
+                self.tweetsTableView.reloadData()
+            }
         }
     }
     
@@ -75,6 +74,8 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileTableViewCell",for: indexPath) as! TwitterTableViewCell
         let ourTweet = self.userTweets![indexPath.row]
+        //cell.retweetCountString = shortenNumber(num: ourTweet.retweetCount)
+        //cell.favoritesCountString = shortenNumber(num: ourTweet.favoritesCount)
         cell.tweet = ourTweet
         cell.delegate = self
         return cell
