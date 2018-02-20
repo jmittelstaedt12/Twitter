@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class replyViewController: UIViewController, UITextViewDelegate {
 
@@ -25,11 +26,23 @@ class replyViewController: UIViewController, UITextViewDelegate {
         
         let paramsDict: NSDictionary = NSDictionary(dictionary: ["status" : replyText!,"in_reply_to_status_id" : replyID!])
         
-        TwitterClient.sharedInstance.createTweet(tweetText: replyText!, params: paramsDict, completion: { (error) -> () in
-            print(error?.localizedDescription as Any)
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+        TwitterClient.sharedInstance.createTweet(tweetText: replyText!, params: paramsDict, success: {() -> () in
+            MBProgressHUD.hide(for: self.view, animated: true)
+            let alert = UIAlertController(title: "", message: "Posted!", preferredStyle: .alert)
+            self.present(alert, animated: true, completion: nil)
+            let when = DispatchTime.now() + 1
+            DispatchQueue.main.asyncAfter(deadline: when, execute: {
+                alert.dismiss(animated: true, completion: nil)
+            })
+            self.dismiss(animated: true, completion: nil)
+        }, failure: { (error) -> () in
+            MBProgressHUD.hide(for: self.view, animated: true)
+            let alert = UIAlertController(title: "Failed Login", message: error?.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
             
         })
-        self.dismiss(animated: true, completion: nil)
     }
     
     var tweet: Tweet?

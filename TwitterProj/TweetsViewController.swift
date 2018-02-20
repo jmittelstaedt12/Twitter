@@ -11,7 +11,6 @@ import MBProgressHUD
 
 class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, TweetCellActions, UIScrollViewDelegate{
 
-
     @IBOutlet weak var tableView: UITableView!
     @IBAction func onLogoutButton(_ sender: Any) {
         TwitterClient.sharedInstance.logout()
@@ -83,7 +82,6 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }) { (error) in
             print(error.localizedDescription)
         }
-        
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -155,7 +153,6 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     print(error.localizedDescription)
                 }
             } else{
-                
                 TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweet) in
                     tweet.favoritesCount = favors+1
                     tweet.favorited = true

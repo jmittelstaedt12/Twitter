@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import MBProgressHUD
+
 class newTweetViewController: UIViewController, UITextViewDelegate {
 
     @IBOutlet weak var tweetTextView: UITextView!
@@ -23,11 +25,16 @@ class newTweetViewController: UIViewController, UITextViewDelegate {
         tweetText = tweetTextView.text
         let paramsDict: NSDictionary = NSDictionary(dictionary: ["status" : tweetText!])
         
-        TwitterClient.sharedInstance.createTweet(tweetText: tweetText!, params: paramsDict, completion: { (error) -> () in
-            print(error?.localizedDescription as Any)
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+        TwitterClient.sharedInstance.createTweet(tweetText: tweetText!, params: paramsDict, success: {() -> () in
+            MBProgressHUD.hide(for: self.view, animated: true)
+            self.dismiss(animated: true, completion: nil)
+        }, failure: { (error) -> () in
+            MBProgressHUD.hide(for: self.view, animated: true)
+            let alert = UIAlertController(title: "Failed Tweet", message: error?.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         })
-        
-        self.dismiss(animated: true, completion: nil)
     }
     
     var tweetText: String!
@@ -42,7 +49,6 @@ class newTweetViewController: UIViewController, UITextViewDelegate {
         usernameLabel.text = user?.name
         handleLabel.text = user?.screenName
         profileImageView.setImageWith((user?.profileURL)!)
-
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -58,6 +64,4 @@ class newTweetViewController: UIViewController, UITextViewDelegate {
             tweetTextView.textColor = .lightGray
         }
     }
-    
-
 }

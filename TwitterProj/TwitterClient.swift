@@ -57,7 +57,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     }
     func homeTimeline(max_id: String = "", success: @escaping (([Tweet]) -> ()), failure : @escaping
         (Error) -> ()) {
-        var getString = "1.1/statuses/home_timeline.json?count=20&tweet_mode=extended"
+        var getString = "1.1/statuses/home_timeline.json?count=20&tweet_mode=extended&exclude_replies=true"
         if max_id != ""{
             getString += "&max_id=\(max_id)"
         }
@@ -107,16 +107,16 @@ class TwitterClient: BDBOAuth1SessionManager {
         })
     }
     
-    func createTweet(tweetText : String, params: NSDictionary?, completion: @escaping (_ error: Error?) -> ()) {
+    func createTweet(tweetText : String, params: NSDictionary?, success: @escaping () -> (), failure: @escaping (_ error: Error?) -> ()) {
         post("1.1/statuses/update.json",
             parameters: params,
             progress: nil,
             success: {(operation: URLSessionDataTask!, response: Any?) -> Void in
                 print("tweet succeeded: \(tweetText)")
-                completion(nil)
+                success()
         }, failure: { (operation: URLSessionDataTask?, error: Error?) -> Void in
             print("Error: \(error!.localizedDescription)")
-            completion(error as Error?)
+            failure(error as Error?)
         })
     }
     func currentAccount(success: @escaping ((User) -> ()), failure : @escaping
@@ -173,13 +173,7 @@ class TwitterClient: BDBOAuth1SessionManager {
         get("1.1/search/tweets.json?q=to:\(screen_name)&since_id=\(since_id)&tweet_mode=extended&count=100",parameters: nil,progress: nil,
             success: {(task, response) in
                 let mainDictionary = response as! NSDictionary
-                let allDictionaries = mainDictionary.value(forKeyPath: "statuses") as! [NSDictionary]
-                var dictionaries : [NSDictionary] = []
-                for dictionary in allDictionaries {
-                    if ((dictionary.value(forKeyPath: "in_reply_to_status_id_str") as? String) == since_id){
-                        dictionaries.append(dictionary)
-                    }
-                }
+                let dictionaries = (mainDictionary.value(forKeyPath: "statuses") as! [NSDictionary]).filter {($0.value(forKeyPath: "in_reply_to_status_id_str") as? String) == since_id}
                 let tweets = Tweet.tweetsWithArray(dictionaries: dictionaries)
                 success(tweets)
         },failure: {(task,error) in

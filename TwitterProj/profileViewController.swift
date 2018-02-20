@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class profileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, TweetCellActions{
     
@@ -68,14 +69,11 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
         } else{
             return 0
         }
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileTableViewCell",for: indexPath) as! TwitterTableViewCell
         let ourTweet = self.userTweets![indexPath.row]
-        //cell.retweetCountString = shortenNumber(num: ourTweet.retweetCount)
-        //cell.favoritesCountString = shortenNumber(num: ourTweet.favoritesCount)
         cell.tweet = ourTweet
         cell.delegate = self
         return cell
@@ -142,6 +140,16 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func profileSegue(_ cell: UITableViewCell) {
+        let tweet = userTweets[tweetsTableView.indexPath(for: cell)!.row]
+        guard tweet.screenName != screen_name else{
+            return
+        }
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+        self.tweet = tweet
+        screen_name = tweet.screenName
+        viewDidLoad()
+        tweetsTableView.setContentOffset(CGPoint.zero, animated: false)
+        MBProgressHUD.hide(for: self.view, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -151,10 +159,7 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
             let tweet = userTweets[indexPath!.row]
             let navVC = segue.destination as? UINavigationController
             let detailedVC = navVC?.viewControllers.first as! TweetDetailsViewController
-            
             detailedVC.tweet = tweet
-            
         }
     }
-
 }

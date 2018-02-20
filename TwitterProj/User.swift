@@ -21,20 +21,18 @@ class User: NSObject {
         
         name = dictionary["name"] as? String
         screenName = dictionary["screen_name"] as? String
-        
-        if let profileURLString = dictionary["profile_image_url_https"] as?
-            String {
+
+        if let profileURLString = dictionary["profile_image_url_https"] as? String {
             profileURL = URL(string: profileURLString.replacingOccurrences(of: "_normal", with: ""))
-            
         }
-        
+
         tagLine = dictionary["description"] as? String
     }
     
     static let userDidLogoutNotificationName = NSNotification.Name(rawValue:
         "UserDidLogout")
     static var _currentUser : User?
-    
+
     class var currentUser : User? {
         set {
             let user = newValue
@@ -45,7 +43,6 @@ class User: NSObject {
                 defaults.setValue(data, forKey: "currentUser")
             }else {
                 defaults.removeObject(forKey: "currentData")
-
             }
             defaults.synchronize()
         }

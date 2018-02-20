@@ -76,12 +76,6 @@ class TweetDetailsViewController: UIViewController, UITableViewDelegate, UITable
         replyTableView.rowHeight = UITableViewAutomaticDimension
         replyTableView.tableHeaderView = headerView
         
-        TwitterClient.sharedInstance.replyTimelineRequest(screen_name: tweet.screenName!, since_id: tweet.id, success: { (tweets) in
-            self.replyTweets = tweets
-            self.replyTableView.reloadData()
-        }) { (error) in
-            print(error.localizedDescription)
-        }
         profileImageView.isUserInteractionEnabled = true
         favoriteImageView.isUserInteractionEnabled = true
         retweetImageView.isUserInteractionEnabled = true
@@ -102,6 +96,14 @@ class TweetDetailsViewController: UIViewController, UITableViewDelegate, UITable
             self.replyTableView.reloadData()
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        TwitterClient.sharedInstance.replyTimelineRequest(screen_name: tweet.screenName, since_id: tweet.id, success: { (tweets) in
+            self.replyTweets = tweets
+            self.replyTableView.reloadData()
+        }) { (error) in
+            print(error.localizedDescription)
+        }    }
     
     func tapProfile(){
         performSegue(withIdentifier: "profileSegue", sender: tweet)

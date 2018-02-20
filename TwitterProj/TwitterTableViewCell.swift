@@ -80,21 +80,9 @@ class TwitterTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         setupGestures()
-//        let imageFrame = self.imageInTweetView.frame
-//        if self.imageInTweetView.image == nil{
-//            self.imageInTweetView.frame = CGRect(x: imageFrame.origin.x, y: imageFrame.origin.y, width: imageFrame.width, height: 0)
-//        }
-//        else{
-//            self.imageInTweetView.frame = imageFrame
-//        }
     }
-//    
-//    override func prepareForReuse() {
-//        
-//    }
     
     func setupGestures(){
-
         let toggleRetweet = UITapGestureRecognizer(target: self, action: #selector(toggleRetweet(_:)))
         retweetImageView.addGestureRecognizer(toggleRetweet)
         retweetImageView.isUserInteractionEnabled = true
