@@ -40,7 +40,7 @@ class TweetDetailsViewController: UIViewController, UITableViewDelegate, UITable
         super.viewDidLoad()        
         usernameLabel.text = tweet?.name
         handleLabel.text = "@" + (tweet?.screenName)!
-        userRetweetedLabel.text = (tweet?.retweeterName!)! + " Retweeted"
+        userRetweetedLabel.text = (tweet.retweeterName != "") ? tweet.retweeterName + " Retweeted" : ""
         tweetLabel.text = tweet?.text
         let ourTimeStamp: Date = (tweet?.timestamp)!
         let dateformatter = DateFormatter()
