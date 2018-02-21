@@ -55,8 +55,8 @@ class TwitterClient: BDBOAuth1SessionManager {
         self.loginFailure?(error!)
         }
     }
-    func homeTimeline(max_id: String = "", success: @escaping (([Tweet]) -> ()), failure : @escaping
-        (Error) -> ()) {
+
+    func homeTimeline(max_id: String = "", completionHandler: @escaping (([Tweet]?,Error?) -> ())) {
         var getString = "1.1/statuses/home_timeline.json?count=20&tweet_mode=extended&exclude_replies=true"
         if max_id != ""{
             getString += "&max_id=\(max_id)"
@@ -69,11 +69,11 @@ class TwitterClient: BDBOAuth1SessionManager {
                 let dictionaries = response as! [NSDictionary]
                 let tweets = Tweet.tweetsWithArray(dictionaries:
                     dictionaries)
-                success(tweets)
-    }, failure: { (task, error) in
-        print("Error: \(error.localizedDescription)")
-        failure(error)
-    })
+                completionHandler(tweets,nil)
+        }, failure: { (task, error) in
+            print("Error: \(error.localizedDescription)")
+            completionHandler(nil,error)
+        })
     }
     
     func retweetRequest(id : String, success: @escaping ((Tweet) -> ()), failure : @escaping
