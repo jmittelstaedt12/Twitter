@@ -5,9 +5,9 @@
 //  Created by Jacob Mittelstaedt on 2/27/17.
 //  Copyright © 2017 Jacob Mittelstaedt. All rights reserved.
 //
-//
 //  ViewController for a timeline of tweets. User can look through tweets, refresh, or navigate
 //  to a profile or tweet detail VC.
+//
 
 import UIKit
 import MBProgressHUD
