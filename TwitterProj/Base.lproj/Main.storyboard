@@ -242,7 +242,7 @@
                                             <outlet property="tweetLabel" destination="YHZ-ci-ycB" id="Lj6-pU-6WT"/>
                                             <outlet property="userRetweetedLabel" destination="jya-B8-wgD" id="5Y8-ZP-Cwg"/>
                                             <outlet property="usernameLabel" destination="A6F-i6-7rz" id="wKk-JS-FyI"/>
-                                            <segue destination="G6T-49-lgx" kind="presentation" identifier="tweetTapSegue" id="bes-Sj-J98"/>
+                                            <segue destination="G6T-49-lgx" kind="show" identifier="tweetTapSegue" id="bes-Sj-J98"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -287,11 +287,11 @@
                         <viewControllerLayoutGuide type="bottom" id="jTl-Ts-kUC"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="UZj-Fn-LDU">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dlJ-7k-ytn">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <view key="tableHeaderView" clipsSubviews="YES" contentMode="scaleToFill" id="ylg-aZ-Ftf">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="243.5"/>
@@ -657,6 +657,7 @@
                         <outlet property="tweetCountLabel" destination="bhE-sa-EhM" id="xug-ou-t8t"/>
                         <outlet property="tweetsTableView" destination="dlJ-7k-ytn" id="9ju-py-zzr"/>
                         <outlet property="usernameLabel" destination="Ntk-qX-zJH" id="gE1-mh-5pE"/>
+                        <segue destination="G6T-49-lgx" kind="show" identifier="profileTweetTapSegue" id="QJt-PP-6mm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="35v-PF-Wa3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1340,6 +1341,7 @@
         <image name="retweet-icon" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="UoP-LI-Kvh"/>
+        <segue reference="QJt-PP-6mm"/>
+        <segue reference="5DG-5B-REB"/>
     </inferredMetricsTieBreakers>
 </document>

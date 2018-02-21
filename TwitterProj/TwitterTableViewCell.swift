@@ -31,7 +31,7 @@ class TwitterTableViewCell: UITableViewCell {
             if let tweet = tweet{
                 usernameLabel.text = tweet.name
                 handleLabel.text = "@" + tweet.screenName
-                userRetweetedLabel.text = tweet.retweeterName + " Retweeted"
+                userRetweetedLabel.text = (tweet.retweeterName != "") ? tweet.retweeterName + " Retweeted" : ""
                 retweetLabel.text = Tweet.shortenNumber(num: tweet.retweetCount)
                 favoriteLabel.text = Tweet.shortenNumber(num: tweet.favoritesCount)
                 tweetLabel.text = tweet.text

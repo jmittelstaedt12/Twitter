@@ -169,6 +169,7 @@ class TwitterClient: BDBOAuth1SessionManager {
         },failure: {(task,error) in
             failure(error)})
     }
+    
     func replyTimelineRequest(screen_name : String, since_id : String, success: @escaping (([Tweet]) -> ()), failure : @escaping (Error) -> ()){
         get("1.1/search/tweets.json?q=to:\(screen_name)&since_id=\(since_id)&tweet_mode=extended&count=100",parameters: nil,progress: nil,
             success: {(task, response) in

@@ -77,10 +77,8 @@ class Tweet: NSObject {
     class func tweetsWithArray(dictionaries : [NSDictionary]) -> [Tweet] {
         
         var tweets = [Tweet]()
-        
         dictionaries.forEach { (dictionary) in tweets.append(Tweet(dictionary:
             dictionary)) }
-        
         return tweets
     }
     
@@ -96,5 +94,57 @@ class Tweet: NSObject {
             }else{shortened = "\(round(Double(num)*10/1000)/10)K"}
         }
         return shortened
+    }
+    
+    class func toggleRetweet(_ tweet: Tweet,tweetArray: [Tweet], success: @escaping ((Tweet,Int) -> ()), failure : @escaping ((Error) -> ())){
+        guard let index = tweetArray.index(of: tweet) else{
+            print("No replies or reply not found")
+            return
+        }
+        let retweets = tweetArray[index].retweetCount
+        if tweetArray[index].retweeted{
+            TwitterClient.sharedInstance.unretweetRequest(id: (tweet.id)!, success: { (tweet) in
+                tweet.retweetCount = retweets-1
+                tweet.retweeted = false
+                success(tweet,index)
+            }) { (error) in
+                print(error.localizedDescription)
+                failure(error)
+            }
+        } else{
+            TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweet) in
+                tweet.retweetCount = retweets+1
+                tweet.retweeted = true
+                success(tweet,index)
+            }) { (error) in
+                print(error.localizedDescription)
+                failure(error)
+            }
+        }
+    }
+    
+    class func toggleFavor(_ tweet: Tweet,tweetArray: [Tweet], success: @escaping ((Tweet,Int) -> ()), failure: @escaping ((Error) -> ())){
+        guard let index = tweetArray.index(of: tweet) else{
+            print("No replies or reply not found")
+            return
+        }
+        let favors = tweetArray[index].favoritesCount
+        if tweetArray[index].favorited{
+            TwitterClient.sharedInstance.unfavorRequest(id: (tweet.id)!, success: { (tweet) in
+                tweet.favoritesCount = favors-1
+                tweet.favorited = false
+                success(tweet,index)
+            }) { (error) in
+                print(error.localizedDescription)
+            }
+        } else{
+            TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweet) in
+                tweet.favoritesCount = favors+1
+                tweet.favorited = true
+                success(tweet,index)
+            }) { (error) in
+                print(error.localizedDescription)
+            }
+        }
     }
 }

@@ -109,59 +109,79 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func toggleRetweet(_ tweet: Tweet) {
-        if let index = tweets.index(of: tweet) {
-            
-            let indexPath = IndexPath(row: index, section: 0)
-            let favors = self.tweets[index].favoritesCount
-            let retweets = self.tweets[index].retweetCount
-            if self.tweets[index].retweeted{
-                TwitterClient.sharedInstance.unretweetRequest(id: (tweet.id)!, success: { (tweet) in
-                    tweet.retweetCount = retweets-1
-                    tweet.retweeted = false
-                    tweet.retweeterName = self.tweets[index].retweetOfRetweetName
-                    self.tweets[index] = tweet
-                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                }) { (error) in
-                    
-                }
-            } else{
-                TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweet) in
-                    tweet.retweetCount = retweets+1
-                    tweet.retweeted = true
-                    tweet.retweetOfRetweetName = self.tweets[index].retweeterName
-                    self.tweets[index] = tweet
-                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                }) { (error) in
-                    
-                }
-            }
-            self.tweets[index].favoritesCount = favors
+//        if let index = tweets.index(of: tweet) {
+//
+//            let indexPath = IndexPath(row: index, section: 0)
+//            let favors = self.tweets[index].favoritesCount
+//            let retweets = self.tweets[index].retweetCount
+//            if self.tweets[index].retweeted{
+//                TwitterClient.sharedInstance.unretweetRequest(id: (tweet.id)!, success: { (tweet) in
+//                    tweet.retweetCount = retweets-1
+//                    tweet.retweeted = false
+//                    tweet.retweeterName = self.tweets[index].retweetOfRetweetName
+//                    self.tweets[index] = tweet
+//                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
+//                }) { (error) in
+//
+//                }
+//            } else{
+//                TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweet) in
+//                    tweet.retweetCount = retweets+1
+//                    tweet.retweeted = true
+//                    tweet.retweetOfRetweetName = self.tweets[index].retweeterName
+//                    self.tweets[index] = tweet
+//                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
+//                }) { (error) in
+//
+//                }
+//            }
+//            self.tweets[index].favoritesCount = favors
+//        }
+        
+        Tweet.toggleRetweet(tweet, tweetArray: tweets, success: { (tweet,index) in
+            self.tweets[index] = tweet
+            self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        }) { (error) in
+            print(error.localizedDescription)
         }
+//        if tweets != nil{
+//            let (index,retweetedTweet) = Tweet.toggleRetweet(tweet, tweetArray: tweets)
+//            if index != nil, retweetedTweet != nil{
+//                    tweets[index!] = retweetedTweet!
+//                    self.tableView.reloadRows(at: [IndexPath(row: index!, section: 0)], with: .automatic)
+//            }
+//        }
     }
     
     func toggleFavor(_ tweet: Tweet) {
-        if let index = tweets.index(of: tweet) {
-            let indexPath = IndexPath(row: index, section: 0)
-            let favors = self.tweets[index].favoritesCount
-            if self.tweets[index].favorited{
-                TwitterClient.sharedInstance.unfavorRequest(id: (tweet.id)!, success: { (tweet) in
-                    tweet.favoritesCount = favors-1
-                    tweet.favorited = false
-                    self.tweets[index] = tweet
-                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                }) { (error) in
-                    print(error.localizedDescription)
-                }
-            } else{
-                TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweet) in
-                    tweet.favoritesCount = favors+1
-                    tweet.favorited = true
-                    self.tweets[index] = tweet
-                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                }) { (error) in
-                    print(error.localizedDescription)
-                }
-            }
+//        if let index = tweets.index(of: tweet) {
+//            let indexPath = IndexPath(row: index, section: 0)
+//            let favors = self.tweets[index].favoritesCount
+//            if self.tweets[index].favorited{
+//                TwitterClient.sharedInstance.unfavorRequest(id: (tweet.id)!, success: { (tweet) in
+//                    tweet.favoritesCount = favors-1
+//                    tweet.favorited = false
+//                    self.tweets[index] = tweet
+//                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
+//                }) { (error) in
+//                    print(error.localizedDescription)
+//                }
+//            } else{
+//                TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweet) in
+//                    tweet.favoritesCount = favors+1
+//                    tweet.favorited = true
+//                    self.tweets[index] = tweet
+//                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
+//                }) { (error) in
+//                    print(error.localizedDescription)
+//                }
+//            }
+//        }
+        Tweet.toggleFavor(tweet, tweetArray: tweets, success: { (tweet,index) in
+            self.tweets[index] = tweet
+            self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        }) { (error) in
+            print(error.localizedDescription)
         }
     }
     

@@ -174,11 +174,83 @@ class TweetDetailsViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func toggleRetweet(_ tweet: Tweet) {
-        
+        if replyTweets == nil{
+            return
+        }
+        Tweet.toggleRetweet(tweet, tweetArray: replyTweets!, success: { (tweet,index) in
+            self.replyTweets![index] = tweet
+            self.replyTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+//        guard replyTweets != nil, let index = replyTweets!.index(of: tweet) else{
+//            print("No replies or reply not found")
+//            return
+//        }
+//        let indexPath = IndexPath(row: index, section: 0)
+//        let retweets = self.replyTweets![index].retweetCount
+//        if self.replyTweets![index].retweeted{
+//            TwitterClient.sharedInstance.unretweetRequest(id: (tweet.id)!, success: { (tweet) in
+//                tweet.retweetCount = retweets-1
+//                tweet.retweeted = false
+//            }) { (error) in
+//                print(error.localizedDescription)
+//                return
+//            }
+//        } else{
+//            TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweet) in
+//                tweet.retweetCount = retweets+1
+//                tweet.retweeted = true
+//            }) { (error) in
+//                print(error.localizedDescription)
+//                return
+//            }
+//        }
+//        self.replyTweets![index] = tweet
+//        if replyTweets != nil{
+//            let (index,retweetedTweet) = Tweet.toggleRetweet(tweet, tweetArray: replyTweets!)
+//            if index != nil, retweetedTweet != nil{
+//                replyTweets![index!] = retweetedTweet!
+//                self.replyTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+//            }
+//        }
     }
     
     func toggleFavor(_ tweet: Tweet) {
-        
+        if replyTweets == nil{
+            return
+        }
+        Tweet.toggleFavor(tweet, tweetArray: replyTweets!, success: { (tweet,index) in
+            self.replyTweets![index] = tweet
+            self.replyTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+//        guard replyTweets != nil, let index = replyTweets!.index(of: tweet) else{
+//            print("Tweet not found in userTweets")
+//            return
+//        }
+//        let indexPath = IndexPath(row: index, section: 0)
+//        let favors = self.replyTweets![index].favoritesCount
+//        if self.replyTweets![index].favorited{
+//            TwitterClient.sharedInstance.unfavorRequest(id: (tweet.id)!, success: { (tweet) in
+//                tweet.favoritesCount = favors-1
+//                tweet.favorited = false
+//            }) { (error) in
+//                print(error.localizedDescription)
+//                return
+//            }
+//        } else{
+//            TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweet) in
+//                tweet.favoritesCount = favors+1
+//                tweet.favorited = true
+//            }) { (error) in
+//                print(error.localizedDescription)
+//                return
+//            }
+//        }
+//        self.replyTweets![index] = tweet
+//        self.replyTableView.reloadRows(at: [indexPath], with: .automatic)
     }
     
     func tweetSegue(_ cell: UITableViewCell) {
