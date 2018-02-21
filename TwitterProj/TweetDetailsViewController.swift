@@ -50,16 +50,8 @@ class TweetDetailsViewController: UIViewController, UITableViewDelegate, UITable
         retweetLabel.text = Tweet.shortenNumber(num: tweet.retweetCount)
         favoritesLabel.text = Tweet.shortenNumber(num: tweet.favoritesCount)
         profileImageView.setImageWith(tweet.profileURLHD)
-        if tweet.retweeted == true{
-            retweetImageView.image = #imageLiteral(resourceName: "retweet-icon-green")
-        } else{
-            retweetImageView.image = #imageLiteral(resourceName: "retweet-icon")
-        }
-        if tweet.favorited == true{
-            favoriteImageView.image = #imageLiteral(resourceName: "favor-icon-red")
-        } else{
-            favoriteImageView.image = #imageLiteral(resourceName: "favor-icon")
-        }
+        retweetImageView.image = (tweet.retweeted == true) ? #imageLiteral(resourceName: "retweet-icon-green") : #imageLiteral(resourceName: "retweet-icon")
+        favoriteImageView.image = (tweet.favorited == true) ? #imageLiteral(resourceName: "favor-icon-red") : #imageLiteral(resourceName: "favor-icon")
         if (tweet.imageInTweetURL != nil){
             imageInTweetView.setImageWith(tweet.imageInTweetURL!)
             let imageAspect = Double((imageInTweetView.image?.size.width)!)/Double((imageInTweetView.image?.size.height)!)

@@ -38,7 +38,7 @@ class replyViewController: UIViewController, UITextViewDelegate {
             self.dismiss(animated: true, completion: nil)
         }, failure: { (error) -> () in
             MBProgressHUD.hide(for: self.view, animated: true)
-            let alert = UIAlertController(title: "Failed Login", message: error?.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: "Failed Post", message: error?.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             
