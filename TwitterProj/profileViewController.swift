@@ -25,7 +25,6 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var infoView: UIView!
     
     var tweet: Tweet?
-    var screen_name: String?
     var userTweets: [Tweet]!
     
     override func viewDidLoad() {
@@ -52,7 +51,7 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
         tweetsTableView.estimatedRowHeight = 200
         tweetsTableView.rowHeight = UITableViewAutomaticDimension
         tweetsTableView.tableHeaderView = headerView
-        TwitterClient.sharedInstance.userTimelineRequest(screen_name: screen_name!, success: { (tweets: [Tweet]) in
+        TwitterClient.sharedInstance.userTimelineRequest(screen_name: tweet.screenName, success: { (tweets: [Tweet]) in
             self.userTweets = tweets
             self.tweetsTableView.reloadData()
         }) { (error: Error) in
@@ -88,31 +87,6 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
         }) { (error) in
             print(error.localizedDescription)
         }
-//        guard let index = userTweets.index(of: tweet) else{
-//            print("Tweet not found in userTweets")
-//            return
-//        }
-//        let indexPath = IndexPath(row: index, section: 0)
-//        let retweets = self.userTweets[index].retweetCount
-//        if self.userTweets[index].retweeted{
-//            TwitterClient.sharedInstance.unretweetRequest(id: (tweet.id)!, success: { (tweet) in
-//                tweet.retweetCount = retweets-1
-//                tweet.retweeted = false
-//            }) { (error) in
-//                print(error.localizedDescription)
-//                return
-//            }
-//        } else{
-//            TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweet) in
-//                tweet.retweetCount = retweets+1
-//                tweet.retweeted = true
-//            }) { (error) in
-//                print(error.localizedDescription)
-//                return
-//            }
-//        }
-//        self.userTweets[index] = tweet
-//        self.tweetsTableView.reloadRows(at: [indexPath], with: .automatic)
     }
 
     func toggleFavor(_ tweet: Tweet) {
@@ -122,31 +96,6 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
         }) { (error) in
             print(error.localizedDescription)
         }
-//        guard let index = userTweets.index(of: tweet) else{
-//            print("Tweet not found in userTweets")
-//            return
-//        }
-//        let indexPath = IndexPath(row: index, section: 0)
-//        let favors = self.userTweets[index].favoritesCount
-//        if self.userTweets[index].favorited{
-//            TwitterClient.sharedInstance.unfavorRequest(id: (tweet.id)!, success: { (tweet) in
-//                tweet.favoritesCount = favors-1
-//                tweet.favorited = false
-//            }) { (error) in
-//                print(error.localizedDescription)
-//                return
-//            }
-//        } else{
-//            TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweet) in
-//                tweet.favoritesCount = favors+1
-//                tweet.favorited = true
-//            }) { (error) in
-//                print(error.localizedDescription)
-//                return
-//            }
-//        }
-//        self.userTweets[index] = tweet
-//        self.tweetsTableView.reloadRows(at: [indexPath], with: .automatic)
     }
     
     func tweetSegue(_ cell: UITableViewCell) {
@@ -155,12 +104,11 @@ class profileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func profileSegue(_ cell: UITableViewCell) {
         let tweet = userTweets[tweetsTableView.indexPath(for: cell)!.row]
-        guard tweet.screenName != screen_name else{
+        guard tweet.screenName != self.tweet?.screenName else{
             return
         }
         MBProgressHUD.showAdded(to: self.view, animated: true)
         self.tweet = tweet
-        screen_name = tweet.screenName
         viewDidLoad()
         tweetsTableView.setContentOffset(CGPoint.zero, animated: false)
         MBProgressHUD.hide(for: self.view, animated: true)

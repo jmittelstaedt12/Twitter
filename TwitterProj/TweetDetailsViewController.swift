@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class TweetDetailsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, TweetCellActions {
     
@@ -183,37 +184,6 @@ class TweetDetailsViewController: UIViewController, UITableViewDelegate, UITable
         }) { (error) in
             print(error.localizedDescription)
         }
-//        guard replyTweets != nil, let index = replyTweets!.index(of: tweet) else{
-//            print("No replies or reply not found")
-//            return
-//        }
-//        let indexPath = IndexPath(row: index, section: 0)
-//        let retweets = self.replyTweets![index].retweetCount
-//        if self.replyTweets![index].retweeted{
-//            TwitterClient.sharedInstance.unretweetRequest(id: (tweet.id)!, success: { (tweet) in
-//                tweet.retweetCount = retweets-1
-//                tweet.retweeted = false
-//            }) { (error) in
-//                print(error.localizedDescription)
-//                return
-//            }
-//        } else{
-//            TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweet) in
-//                tweet.retweetCount = retweets+1
-//                tweet.retweeted = true
-//            }) { (error) in
-//                print(error.localizedDescription)
-//                return
-//            }
-//        }
-//        self.replyTweets![index] = tweet
-//        if replyTweets != nil{
-//            let (index,retweetedTweet) = Tweet.toggleRetweet(tweet, tweetArray: replyTweets!)
-//            if index != nil, retweetedTweet != nil{
-//                replyTweets![index!] = retweetedTweet!
-//                self.replyTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-//            }
-//        }
     }
     
     func toggleFavor(_ tweet: Tweet) {
@@ -226,39 +196,23 @@ class TweetDetailsViewController: UIViewController, UITableViewDelegate, UITable
         }) { (error) in
             print(error.localizedDescription)
         }
-//        guard replyTweets != nil, let index = replyTweets!.index(of: tweet) else{
-//            print("Tweet not found in userTweets")
-//            return
-//        }
-//        let indexPath = IndexPath(row: index, section: 0)
-//        let favors = self.replyTweets![index].favoritesCount
-//        if self.replyTweets![index].favorited{
-//            TwitterClient.sharedInstance.unfavorRequest(id: (tweet.id)!, success: { (tweet) in
-//                tweet.favoritesCount = favors-1
-//                tweet.favorited = false
-//            }) { (error) in
-//                print(error.localizedDescription)
-//                return
-//            }
-//        } else{
-//            TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweet) in
-//                tweet.favoritesCount = favors+1
-//                tweet.favorited = true
-//            }) { (error) in
-//                print(error.localizedDescription)
-//                return
-//            }
-//        }
-//        self.replyTweets![index] = tweet
-//        self.replyTableView.reloadRows(at: [indexPath], with: .automatic)
     }
     
     func tweetSegue(_ cell: UITableViewCell) {
-        
+        let thisTweet = replyTweets?[replyTableView.indexPath(for: cell)!.row]
+        guard replyTweets != nil,self.tweet.screenName != thisTweet?.screenName else{
+            return
+        }
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+        self.tweet = thisTweet!
+        viewDidLoad()
+        viewWillAppear(true)
+        replyTableView.setContentOffset(CGPoint.zero, animated: false)
+        MBProgressHUD.hide(for: self.view, animated: true)
     }
     
     func profileSegue(_ cell: UITableViewCell) {
-        
+        performSegue(withIdentifier: "profileSegue", sender: cell)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -271,8 +225,13 @@ class TweetDetailsViewController: UIViewController, UITableViewDelegate, UITable
         
         if(segue.identifier == "profileSegue"){
             let profileVC = segue.destination as! profileViewController
-            profileVC.tweet = self.tweet
-            profileVC.screen_name = self.tweet.screenName
+            if let cell = sender as? TwitterTableViewCell{
+                let indexPath = replyTableView.indexPath(for: cell)
+                let tweet = replyTweets![indexPath!.row]
+                profileVC.tweet = tweet
+            }else{
+                profileVC.tweet = self.tweet
+            }
         }
     }
 }
