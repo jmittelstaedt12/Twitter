@@ -38,24 +38,24 @@ class TweetDetailsViewController: UIViewController, UITableViewDelegate, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()        
-        usernameLabel.text = tweet?.name
-        handleLabel.text = "@" + (tweet?.screenName)!
+        usernameLabel.text = tweet.name
+        handleLabel.text = "@" + tweet.screenName
         userRetweetedLabel.text = (tweet.retweeterName != "") ? tweet.retweeterName + " Retweeted" : ""
-        tweetLabel.text = tweet?.text
-        let ourTimeStamp: Date = (tweet?.timestamp)!
+        tweetLabel.text = tweet.text
+        let ourTimeStamp: Date = tweet.timestamp
         let dateformatter = DateFormatter()
         dateformatter.dateFormat = "MM/dd/yy, h:mm a"
         let ourDate = dateformatter.string(from: ourTimeStamp)
         timeStampLabel.text = ourDate
         retweetLabel.text = Tweet.shortenNumber(num: tweet.retweetCount)
         favoritesLabel.text = Tweet.shortenNumber(num: tweet.favoritesCount)
-        profileImageView.setImageWith((tweet?.profileURLHD)!)
-        if tweet?.retweeted == true{
+        profileImageView.setImageWith(tweet.profileURLHD)
+        if tweet.retweeted == true{
             retweetImageView.image = #imageLiteral(resourceName: "retweet-icon-green")
         } else{
             retweetImageView.image = #imageLiteral(resourceName: "retweet-icon")
         }
-        if tweet?.favorited == true{
+        if tweet.favorited == true{
             favoriteImageView.image = #imageLiteral(resourceName: "favor-icon-red")
         } else{
             favoriteImageView.image = #imageLiteral(resourceName: "favor-icon")
@@ -87,7 +87,7 @@ class TweetDetailsViewController: UIViewController, UITableViewDelegate, UITable
         let retweetTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tapRetweet))
         retweetImageView.addGestureRecognizer(retweetTapGestureRecognizer)
         
-        if tweet?.retweeterName == ""{
+        if tweet.retweeterName == ""{
             retweetHeightConstraint.constant = 0
         }else{
             retweetHeightConstraint.constant = 20

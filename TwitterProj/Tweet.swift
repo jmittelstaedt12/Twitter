@@ -108,7 +108,6 @@ class Tweet: NSObject {
                 tweet.retweeted = false
                 success(tweet,index)
             }) { (error) in
-                print(error.localizedDescription)
                 failure(error)
             }
         } else{
@@ -117,7 +116,6 @@ class Tweet: NSObject {
                 tweet.retweeted = true
                 success(tweet,index)
             }) { (error) in
-                print(error.localizedDescription)
                 failure(error)
             }
         }
@@ -135,7 +133,7 @@ class Tweet: NSObject {
                 tweet.favorited = false
                 success(tweet,index)
             }) { (error) in
-                print(error.localizedDescription)
+                failure(error)
             }
         } else{
             TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweet) in
@@ -143,7 +141,7 @@ class Tweet: NSObject {
                 tweet.favorited = true
                 success(tweet,index)
             }) { (error) in
-                print(error.localizedDescription)
+                failure(error)
             }
         }
     }

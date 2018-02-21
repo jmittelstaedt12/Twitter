@@ -126,33 +126,6 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-    
-    func favorDetailTweet(_ tweet: Tweet) {
-        if let index = tweets.index(of: tweet) {
-            let indexPath = IndexPath(row: index, section: 0)
-            TwitterClient.sharedInstance.favorRequest(id: (tweet.id)!, success: { (tweet) in
-                self.tweets[index] = tweet
-                self.tableView.reloadRows(at: [indexPath], with: .automatic)
-            }) { (error) in
-                print(error.localizedDescription)
-            }
-        }
-    }
-    
-    func retweetDetail(_ tweet: Tweet) {
-        if let index = tweets.index(of: tweet) {
-            let indexPath = IndexPath(row: index, section: 0)
-            TwitterClient.sharedInstance.retweetRequest(id: (tweet.id)!, success: { (tweet) in
-                self.tweets[index] = tweet
-                self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                
-            }) { (error) in
-                print(error.localizedDescription)
-            }
-        }
-    }
-    
-    
     func tweetSegue(_ cell: UITableViewCell) {
         performSegue(withIdentifier: "tweetTapSegue", sender: cell)
     }
