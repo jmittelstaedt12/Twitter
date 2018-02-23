@@ -29,7 +29,6 @@ Here's a walkthrough of implemented user stories:
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
-
 ## License
 
     Copyright [2017] [Jacob Mittelstaedt]
